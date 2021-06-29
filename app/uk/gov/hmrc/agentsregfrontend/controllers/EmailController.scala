@@ -19,7 +19,6 @@ package uk.gov.hmrc.agentsregfrontend.controllers
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.agentsregfrontend.models.Email
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import javax.inject.Inject
 import uk.gov.hmrc.agentsregfrontend.views.html.EmailPage
 
