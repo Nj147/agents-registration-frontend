@@ -9,4 +9,8 @@ GET        /                        uk.gov.hmrc.agentsregfrontend.controllers.Ho
 
 GET        /email                   uk.gov.hmrc.agentsregfrontend.controllers.EmailController.displayEmailPage
 +nocsrf
-POST       /email                  uk.gov.hmrc.agentsregfrontend.controllers.EmailController.processEmail
+POST       /email                   uk.gov.hmrc.agentsregfrontend.controllers.EmailController.processEmail
+
+GET        /contactNumber           uk.gov.hmrc.agentsregfrontend.controllers.ContactNumberController.displayContactPage
++nocsrf
+POST        /contactNumber          uk.gov.hmrc.agentsregfrontend.controllers.ContactNumberController.processContactNumber

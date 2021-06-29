@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentsregfrontend.models
 
 import play.api.data.Form
-import play.api.data.Forms.{email, mapping}
+import play.api.data.Forms.{email, mapping, number}
 
 case class Agent(arn: String)
 
@@ -30,4 +30,14 @@ object Email {
         "email" -> email
       )(Email.apply)(Email.unapply)
     )
+}
+
+case class ContactNumber(number: Int)
+
+object ContactNumber {
+  val contactForm: Form[ContactNumber] =
+    Form(
+      mapping(
+        "number" -> number
+      )(ContactNumber.apply)(ContactNumber.unapply))
 }
