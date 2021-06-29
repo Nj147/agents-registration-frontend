@@ -1,5 +1,3 @@
-!.gitignore
-
 *.class
 *.log
 *.target
@@ -35,4 +33,4 @@ test-result
 tmp
 .idea_modules
 bin
-vks-pyyz-zzf
+
