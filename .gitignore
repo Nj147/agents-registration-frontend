@@ -1,5 +1,7 @@
-!.gitignore
-
+*.class
+*.log
+*.target
+.*
 .cache
 /.classpath
 db
@@ -31,4 +33,3 @@ test-result
 tmp
 .idea_modules
 bin
-vks-pyyz-zzf

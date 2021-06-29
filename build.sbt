@@ -1,17 +1,41 @@
-name := """agents-registration-frontend"""
-organization := "agents-registration-frontend"
+import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
+import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
-version := "1.0-SNAPSHOT"
+val appName = "agents-registration-frontend"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+val silencerVersion = "1.7.3"
 
-scalaVersion := "2.13.6"
+lazy val microservice = Project(appName, file("."))
+  .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin)
+  .settings(
+    majorVersion                     := 0,
+    scalaVersion                     := "2.12.13",
+    libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test,
+    TwirlKeys.templateImports ++= Seq(
+      "uk.gov.hmrc.govukfrontend.views.html.components._",
+      "uk.gov.hmrc.govukfrontend.views.html.helpers._",
+      "uk.gov.hmrc.hmrcfrontend.views.html.components._",
+      "uk.gov.hmrc.hmrcfrontend.views.html.helpers._"
+    ),
+    pipelineStages in Assets := Seq(gzip),
+    // ***************
+    // Use the silencer plugin to suppress warnings
+    scalacOptions += "-P:silencer:pathFilters=routes",
+    libraryDependencies ++= Seq(
+      compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
+      "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full,
+      "org.jsoup"  %  "jsoup"  % "1.13.1",
+      "com.github.tomakehurst" % "wiremock" % "1.33" % "test"
+    )
 
-libraryDependencies += guice
-libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
+    // ***************
+  )
+  .settings(publishingSettings: _*)
+  .configs(IntegrationTest)
+  .settings(integrationTestSettings(): _*)
+  .settings(resolvers += Resolver.jcenterRepo)
 
-// Adds additional packages into Twirl
-//TwirlKeys.templateImports += "agents-registration-frontend.controllers._"
 
-// Adds additional packages into conf/routes
-// play.sbt.routes.RoutesKeys.routesImport += "agents-registration-frontend.binders._"
+libraryDependencies += ws
+libraryDependencies += "org.scalatestplus" %% "mockito-3-4" % "3.2.5.0" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.9" % "test"
