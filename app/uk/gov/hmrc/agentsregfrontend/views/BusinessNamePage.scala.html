@@ -1,0 +1,20 @@
+@import helper._
+@import uk.gov.hmrc.agentsregfrontend.models.BusinessName
+
+@this(layout: Layout, govukInput : GovukInput, errorSummary : GovukErrorSummary)
+@(form: Form[BusinessName])(implicit request: Request[_], messages: Messages)
+@layout(pageTitle = Some("Business Name Page")) {
+
+<h1 class="govuk-heading-xl" id="title">What is your email?</h1>
+@helper.form(action=uk.gov.hmrc.agentsregfrontend.controllers.routes.BusinessNameController.processBusinessName()){
+
+@if(form.errors.nonEmpty) { @defining(form.errors.map { error => ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))}) { errorLinks => @errorSummary(ErrorSummary(errorList = errorLinks,title = Text(messages("Error Alert "))))}}
+
+@if(form.errors("email").nonEmpty) {
+@govukInput(Input(id = "businessName", name = "businessName", value=Some(form.data("email")), label = Label(content = Text("Job Title:")), hint = Some(Hint(content = Text("It’s on your passport, license, payslip. For example, ‘john’."))), errorMessage = Some(ErrorMessage(content = Text("Enter your first name in lower case")))))
+} else {
+@govukInput(Input(id = "businessName", name = "businessName", value=Some(form.data("email")), label = Label(isPageHeading = true, classes = "govuk-label--l, gg", content = Text("Email:"))))
+}
+<button data-prevent-double-click="true" class="govuk-button" data-module="govuk-button">Confirm and send</button>
+}
+}

@@ -33,7 +33,7 @@ object RegisteringUser{
 case class BusinessName(businessName: String)
 
 object BusinessName {
-  val emailForm: Form[BusinessName] =
+  val form: Form[BusinessName] =
     Form(
       mapping(
         "businessName" -> nonEmptyText
