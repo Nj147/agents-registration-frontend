@@ -17,6 +17,8 @@
 package uk.gov.hmrc.agentsregfrontend.models
 
 import play.api.libs.json.{Json, OFormat}
+
+import play.api.libs.json.{Json, OFormat}
 import play.api.data.Form
 import play.api.data.Forms.{email, mapping, nonEmptyText}
 
@@ -38,7 +40,6 @@ object BusinessName {
       )(BusinessName.apply)(BusinessName.unapply)
     )
 }
-
 
 case class Email(email: String)
 
