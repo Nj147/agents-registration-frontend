@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.agentsregfrontend.controllers
 
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsregfrontend.models.Email
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -27,11 +27,11 @@ class EmailController @Inject()(mcc: MessagesControllerComponents,
                                  emailPage: EmailPage)
   extends FrontendController(mcc) {
 
-  val displayEmailPage = Action { implicit request =>
+  val displayEmailPage: Action[AnyContent] = Action { implicit request =>
     Ok(emailPage(Email.emailForm))
   }
 
-  val processEmail = Action { implicit request =>
+  val processEmail: Action[AnyContent] = Action { implicit request =>
     Email.emailForm.bindFromRequest().fold(
       formWithErrors => BadRequest(emailPage(formWithErrors))
       ,email => Redirect(routes.EmailController.displayEmailPage()).withSession(request.session + ("email" -> email.email))
