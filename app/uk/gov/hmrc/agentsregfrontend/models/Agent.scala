@@ -51,3 +51,13 @@ object Email {
       )(Email.apply)(Email.unapply)
     )
 }
+
+case class ContactNumber(number: Int)
+
+object ContactNumber {
+  val contactForm: Form[ContactNumber] =
+    Form(
+      mapping(
+        "number" -> number
+      )(ContactNumber.apply)(ContactNumber.unapply))
+}
