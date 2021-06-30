@@ -34,7 +34,7 @@ class CorrespondenceController @Inject()(mcc: MessagesControllerComponents, page
       formWithErrors => BadRequest(page(formWithErrors)),
       response => {
         println(response)
-        Redirect(routes.CorrespondenceController.displayCorrespondencePage()).withSession(request.session + ("modes" -> ))
+        Redirect(routes.CorrespondenceController.displayCorrespondencePage()).withSession(request.session + ("modes" -> response.encode))
       }
     )
   }

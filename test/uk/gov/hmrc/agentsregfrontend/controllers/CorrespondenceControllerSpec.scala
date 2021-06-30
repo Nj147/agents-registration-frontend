@@ -43,13 +43,16 @@ class CorrespondenceControllerSpec extends AnyWordSpec with Matchers with GuiceO
 
   "POST /correspondence" should {
     "return 303 redirect" in {
-      val result = controller.processCorrespondence(postfakeRequest.withFormUrlEncodedBody("modes" -> "call"))
+      val result = controller.processCorrespondence(postfakeRequest.withFormUrlEncodedBody("modes[]" -> "call"))
       status(result) shouldBe 303
     }
     "return session variables" in {
-      val result = controller.processCorrespondence(postfakeRequest.withFormUrlEncodedBody("modes" -> "call,text"))
-
+      val result = controller.processCorrespondence(postfakeRequest.withFormUrlEncodedBody("modes[]" -> "call,text"))
       session(result).get("modes") shouldBe Some("call,text")
+    }
+    "return nothing in session when form is left empty" in {
+      val result = controller.processCorrespondence(postfakeRequest.withFormUrlEncodedBody("modes[]" -> ""))
+      session(result).isEmpty
     }
   }
 

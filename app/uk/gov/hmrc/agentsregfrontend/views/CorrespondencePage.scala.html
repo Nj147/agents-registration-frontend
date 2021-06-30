@@ -8,39 +8,46 @@
   <a href="/example-frontend/date" class="govuk-back-link">Back</a>
 
   @helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.CorrespondenceController.processCorrespondence()) {
+<div class="govuk-form-group">
+    <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">
+                Select modes of correspondence you would like to be contacted through:
+            </h1>
+        </legend>
+        <div id="waste-hint" class="govuk-hint">
+            Select all that apply.
+        </div>
+        <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+            <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="PhoneCall" name="modes[0]" type="checkbox" value="Phone call">
+                <label class="govuk-label govuk-checkboxes__label">
+                    Phone call
+                </label>
+            </div>
+            <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="TextMessage" name="modes[1]" type="checkbox" value="Text message">
+                <label class="govuk-label govuk-checkboxes__label">
+                    Text message
+                </label>
+            </div>
+            <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="Email" name="modes[2]" type="checkbox" value="Email">
+                <label class="govuk-label govuk-checkboxes__label">
+                    Email
+                </label>
+            </div>
+            <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="Letter" name="modes[3]" type="checkbox" value="Letter">
+                <label class="govuk-label govuk-checkboxes__label">
+                    Letter
+                </label>
+            </div>
+        </div>
 
-      @govukCheckboxes(Checkboxes(
-      fieldset = Some(Fieldset(
-      legend = Some(Legend(
-      content = Text("What modes of correspondence would you like to be contacted with?"),
-      classes = "govuk-fieldset__legend--l",
-      isPageHeading = true
-      ))
-      )),
-      hint = Some(Hint(
-      content = Text("Select all that apply.")
-      )),
-      idPrefix = Some("modes"),
-      name = "modes",
-      items = Seq(
-      CheckboxItem(
-      content = Text("Phone Call"),
-      value = "call"
-      ),
-      CheckboxItem(
-      content = Text("Text Message"),
-      value = "text"
-      ),
-      CheckboxItem(
-      content = Text("Email"),
-      value = "email"
-      ),
-      CheckboxItem(
-      content = Text("Letter"),
-      value = "letter"
-      )
-      )
-      ))
+    </fieldset>
+</div>
+
         <br>
         <button id="next-button" class="govuk-button" data-module="govuk-button">
             Next
