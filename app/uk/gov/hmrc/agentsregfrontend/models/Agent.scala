@@ -15,8 +15,6 @@
  */
 
 package uk.gov.hmrc.agentsregfrontend.models
-
-import play.api.libs.json.{Json, OFormat}
 import play.api.libs.json.{Json, OFormat}
 import play.api.data.Form
 import play.api.data.Forms.{email, mapping, nonEmptyText, number}
@@ -59,4 +57,16 @@ object ContactNumber {
       mapping(
         "number" -> number
       )(ContactNumber.apply)(ContactNumber.unapply))
+}
+
+case class Password(password: String, passwordCheck: String)
+
+object Password {
+    val passwordForm: Form[Password] =
+      Form(
+        mapping(
+          "password" -> nonEmptyText,
+          "passwordCheck" -> nonEmptyText
+        )(Password.apply)(Password.unapply))
+
 }
