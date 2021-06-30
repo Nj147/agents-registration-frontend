@@ -17,10 +17,9 @@
 package uk.gov.hmrc.agentsregfrontend.models
 
 import play.api.libs.json.{Json, OFormat}
-
 import play.api.libs.json.{Json, OFormat}
 import play.api.data.Form
-import play.api.data.Forms.{email, mapping, nonEmptyText}
+import play.api.data.Forms.{email, mapping, nonEmptyText, number}
 
 case class Agent(arn: String)
 
