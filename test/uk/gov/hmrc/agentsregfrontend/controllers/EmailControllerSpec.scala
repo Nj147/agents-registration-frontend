@@ -7,8 +7,8 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test. FakeRequest
-import play.api.test.Helpers.{charset, contentAsString, contentType, defaultAwaitTimeout, status}
+import play.api.test.FakeRequest
+import play.api.test.Helpers.{charset, contentAsString, contentType, defaultAwaitTimeout, session, status}
 
 class EmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   override def fakeApplication(): Application =
@@ -44,9 +44,10 @@ class EmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerS
       val result = controller.processEmail(fakeRequest.withFormUrlEncodedBody("email" -> ""))
       status(result) shouldBe 400
     }
-    "redirect if valid value input" in {
+    "redirect if valid value input with session data" in {
       val result = controller.processEmail(fakeRequest.withFormUrlEncodedBody("email" -> "test@test.com"))
       status(result) shouldBe 303
+      session(result).get("address").get shouldBe "test@test.com"
     }
   }
 

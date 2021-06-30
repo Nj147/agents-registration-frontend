@@ -16,15 +16,24 @@
 
 package uk.gov.hmrc.agentsregfrontend.controllers
 
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.agentsregfrontend.models.Address
+import uk.gov.hmrc.agentsregfrontend.views.html.AddressPage
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-@Singleton
-class HomeController @Inject()( mcc: MessagesControllerComponents)
+import javax.inject.Inject
+
+class AddressController @Inject()(mcc: MessagesControllerComponents, addressPage: AddressPage)
   extends FrontendController(mcc) {
 
-  val home: Action[AnyContent] = Action { implicit request =>
-    Ok
+  val displayAddressPage: Action[AnyContent] = Action { implicit request =>
+    Ok(addressPage(Address.addressForm))
+  }
+
+  val processAddress: Action[AnyContent] = Action { implicit request =>
+    Address.addressForm.bindFromRequest().fold(
+      formWithErrors => BadRequest(addressPage(formWithErrors))
+      , response => Redirect(routes.AddressController.displayAddressPage()).withSession(request.session + ("address" -> response.encode))
+    )
   }
 }
