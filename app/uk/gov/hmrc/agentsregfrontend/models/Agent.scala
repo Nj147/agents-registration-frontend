@@ -16,10 +16,30 @@
 
 package uk.gov.hmrc.agentsregfrontend.models
 
+import play.api.libs.json.{Json, OFormat}
+
+import play.api.libs.json.{Json, OFormat}
 import play.api.data.Form
-import play.api.data.Forms.{email, mapping}
+import play.api.data.Forms.{email, mapping, nonEmptyText}
 
 case class Agent(arn: String)
+
+case class RegisteringUser(password: String, businessName: String, email: String, mobileNumber: Int, moc: String, addresslineOne: String, addressLineTwo: String, city: String, postcode: String)
+
+object RegisteringUser{
+  implicit val format: OFormat[RegisteringUser] = Json.format[RegisteringUser]
+}
+
+case class BusinessName(businessName: String)
+
+object BusinessName {
+  val form: Form[BusinessName] =
+    Form(
+      mapping(
+        "businessName" -> nonEmptyText
+      )(BusinessName.apply)(BusinessName.unapply)
+    )
+}
 
 case class Email(email: String)
 
