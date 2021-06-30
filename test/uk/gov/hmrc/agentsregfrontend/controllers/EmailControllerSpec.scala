@@ -7,7 +7,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.{FakeRequest, Helpers}
+import play.api.test. FakeRequest
 import play.api.test.Helpers.{charset, contentAsString, contentType, defaultAwaitTimeout, status}
 
 class EmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
@@ -36,6 +36,17 @@ class EmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerS
     "return a page with 1 input" in {
       val result = controller.displayEmailPage(fakeRequest)
       Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
+    }
+  }
+
+  "POST /email" should {
+    "return a bad request if invalid value input" in {
+      val result = controller.processEmail(fakeRequest.withFormUrlEncodedBody("email" -> ""))
+      status(result) shouldBe 400
+    }
+    "redirect if valid value input" in {
+      val result = controller.processEmail(fakeRequest.withFormUrlEncodedBody("email" -> "test@test.com"))
+      status(result) shouldBe 303
     }
   }
 

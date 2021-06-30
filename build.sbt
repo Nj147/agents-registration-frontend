@@ -25,7 +25,6 @@ lazy val microservice = Project(appName, file("."))
       compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
       "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full,
       "org.jsoup"  %  "jsoup"  % "1.13.1",
-      "com.github.tomakehurst" % "wiremock" % "1.33" % "test"
     )
 
     // ***************
@@ -39,3 +38,5 @@ lazy val microservice = Project(appName, file("."))
 libraryDependencies += ws
 libraryDependencies += "org.scalatestplus" %% "mockito-3-4" % "3.2.5.0" % "test"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.9" % "test"
+libraryDependencies += "com.github.tomakehurst" % "wiremock-jre8" % "2.27.1"
+libraryDependencies += "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.3"

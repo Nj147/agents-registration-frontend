@@ -13,4 +13,9 @@ POST       /email                   uk.gov.hmrc.agentsregfrontend.controllers.Em
 
 GET        /contactNumber           uk.gov.hmrc.agentsregfrontend.controllers.ContactNumberController.displayContactPage
 +nocsrf
-POST        /contactNumber          uk.gov.hmrc.agentsregfrontend.controllers.ContactNumberController.processContactNumber
+POST       /contactNumber           uk.gov.hmrc.agentsregfrontend.controllers.ContactNumberController.processContactNumber
+
+GET        /businessName            uk.gov.hmrc.agentsregfrontend.controllers.BusinessNameController.displayBusinessNamePage
++nocsrf
+POST       /businessName            uk.gov.hmrc.agentsregfrontend.controllers.BusinessNameController.processBusinessName
+

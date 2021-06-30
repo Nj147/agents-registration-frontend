@@ -17,23 +17,23 @@
 package uk.gov.hmrc.agentsregfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsregfrontend.models.Email
+import uk.gov.hmrc.agentsregfrontend.models._
+import uk.gov.hmrc.agentsregfrontend.views.html.BusinessNamePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import javax.inject.Inject
-import uk.gov.hmrc.agentsregfrontend.views.html.EmailPage
 
-class EmailController @Inject()(mcc: MessagesControllerComponents,
-                                 emailPage: EmailPage)
+import javax.inject.Inject
+
+class BusinessNameController @Inject()(mcc: MessagesControllerComponents, businessNamePage: BusinessNamePage)
   extends FrontendController(mcc) {
 
-  val displayEmailPage: Action[AnyContent] = Action { implicit request =>
-    Ok(emailPage(Email.emailForm))
+  val displayBusinessNamePage: Action[AnyContent] = Action { implicit request =>
+    Ok(businessNamePage(BusinessName.form))
   }
 
-  val processEmail: Action[AnyContent] = Action { implicit request =>
-    Email.emailForm.bindFromRequest().fold(
-      formWithErrors => BadRequest(emailPage(formWithErrors))
-      ,email => Redirect(routes.EmailController.displayEmailPage()).withSession(request.session + ("email" -> email.email))
+  val processBusinessName: Action[AnyContent] = Action { implicit request =>
+    BusinessName.form.bindFromRequest().fold(
+      formWithErrors => BadRequest(businessNamePage(formWithErrors))
+      , response => Redirect(routes.BusinessNameController.displayBusinessNamePage()).withSession(request.session + ("businessName" -> response.businessName))
     )
   }
 }
