@@ -69,4 +69,22 @@ object Password {
           "passwordCheck" -> nonEmptyText
         )(Password.apply)(Password.unapply))
 
+case class Address(propertyNumber: String, postcode: String) {
+  val encode = propertyNumber + "/" + postcode
+}
+
+object Address {
+  val addressForm: Form[Address] =
+    Form(
+      mapping(
+        "propertyNumber" -> nonEmptyText,
+        "postcode" -> nonEmptyText
+      )(Address.apply)(Address.unapply))
+
+  def decode(string: String): Address = {
+    val (n, p): (String, String) = string.split("/").toList match {
+      case h :: t :: _ => h -> t
+    }
+    Address(n, p)
+  }
 }
