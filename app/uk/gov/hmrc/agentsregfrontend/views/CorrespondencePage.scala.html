@@ -1,0 +1,31 @@
+@import uk.gov.hmrc.agentsregfrontend.models.Correspondence
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@this(layout: Layout, govukCheckbox : GovukCheckboxes, govukErrorSummary : GovukErrorSummary, govukButton: GovukButton)
+
+@(form: Form[Correspondence])(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = Some("Contact Details")) {
+  <a href="/example-frontend/date" class="govuk-back-link">Back</a>
+  <h1 class="govuk-heading-xl">Enter Email Address </h1>
+  @if(form.errors.nonEmpty) {
+    @defining(form.errors.map { error =>
+      ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))
+    }) { errorLinks => @govukErrorSummary(ErrorSummary(
+      errorList = errorLinks,
+      title = Text(messages("error.summary.title"))
+    ))
+    }
+  }
+  @helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.CorrespondenceController.processCorrespondence()) {
+
+    <div class="govuk-form-group">
+        @govukCheckbox(Checkboxes()
+        ))
+      }
+      <br>
+      <button id="next-button" class="govuk-button" data-module="govuk-button">
+        Next
+      </button>
+    </div>
+  }
+}
