@@ -19,7 +19,7 @@
     @helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.EmailController.processEmail()) {
 
         <div class="govuk-form-group">
-            @if(form.errors("email").nonEmpty) {
+            @if(form.errors("number").nonEmpty) {
                 @govukInput(Input(
                     id = "number",
                     name = "number",
