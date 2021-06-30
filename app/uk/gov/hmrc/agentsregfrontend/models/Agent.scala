@@ -17,7 +17,6 @@
 package uk.gov.hmrc.agentsregfrontend.models
 
 import play.api.libs.json.{Json, OFormat}
-import play.api.libs.json.{Json, OFormat}
 import play.api.data.{Form, Forms}
 import play.api.data.Forms.{email, mapping, nonEmptyText, number, text}
 
@@ -81,9 +80,13 @@ object Address {
   }
 }
 
-case class Correspondence(modes: List[String])
+case class Correspondence(modes: List[String]) {
+  def encode: String = modes.mkString(",")
+}
 
 object Correspondence {
+  def decode(string: String): Seq[String] = string.split(",").toList
+
   val correspondenceForm: Form[Correspondence] = Form(
     mapping(
       "modes" -> Forms.list(text)
