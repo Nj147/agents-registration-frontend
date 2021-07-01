@@ -26,3 +26,8 @@ POST       /password                uk.gov.hmrc.agentsregfrontend.controllers.Pa
 GET        /address                 uk.gov.hmrc.agentsregfrontend.controllers.AddressController.displayAddressPage
 +nocsrf
 POST       /adress                  uk.gov.hmrc.agentsregfrontend.controllers.AddressController.processAddress
+
+GET        /correspondence          uk.gov.hmrc.agentsregfrontend.controllers.CorrespondenceController.displayCorrespondencePage
++nocsrf
+POST       /correspondence          uk.gov.hmrc.agentsregfrontend.controllers.CorrespondenceController.processCorrespondence
+
