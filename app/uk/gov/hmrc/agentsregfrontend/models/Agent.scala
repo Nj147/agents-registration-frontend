@@ -22,7 +22,7 @@ import play.api.data.Forms.{email, list, mapping, nonEmptyText, number, text}
 
 case class Agent(arn: String)
 
-case class RegisteringUser(password: String, businessName: String, email: String, mobileNumber: Int, moc: String, addresslineOne: String, addressLineTwo: String, city: String, postcode: String)
+case class RegisteringUser(password: String, businessName: String, email: String, mobileNumber: Int, moc: Seq[String], propertyNumber: String, postcode: String)
 
 object RegisteringUser{
   implicit val format: OFormat[RegisteringUser] = Json.format[RegisteringUser]

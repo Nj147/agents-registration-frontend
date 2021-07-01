@@ -27,7 +27,7 @@ import scala.concurrent.Future
 class AgentConnector @Inject()(ws: WSClient) {
 
   def createAgent(agent: RegisteringUser): Future[Boolean] = {
-    ws.url(s"http://localhost:9001/registerAgent").post(Json.obj("password" -> agent.password, "businessName" -> agent.businessName, "email" -> agent.email, "mobileNumber" -> agent.mobileNumber, "moc" -> agent.moc, "addresslineOne" -> agent.addresslineOne, "addressLineTwo" -> agent.addressLineTwo, "city" -> agent.city, "postcode" -> agent.postcode))
+    ws.url(s"http://localhost:9001/registerAgent").post(Json.obj("password" -> agent.password, "businessName" -> agent.businessName, "email" -> agent.email, "mobileNumber" -> agent.mobileNumber, "moc" -> agent.moc, "propertyNumber" -> agent.propertyNumber, "postcode" -> agent.postcode))
       .map(_.status match {
         case 201 => true
         case 500 => false

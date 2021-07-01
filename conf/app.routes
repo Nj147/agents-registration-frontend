@@ -31,3 +31,5 @@ GET        /correspondence          uk.gov.hmrc.agentsregfrontend.controllers.Co
 +nocsrf
 POST       /correspondence          uk.gov.hmrc.agentsregfrontend.controllers.CorrespondenceController.processCorrespondence
 
+GET        /summary                 uk.gov.hmrc.agentsregfrontend.controllers.SummaryController.summary
+
