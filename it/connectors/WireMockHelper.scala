@@ -12,7 +12,7 @@ import play.api.libs.ws.WSClient
 trait WireMockHelper extends Eventually with IntegrationPatience {
   self: GuiceOneServerPerSuite =>
 
-  val wireMockPort = 9001
+  val wireMockPort = 9009
   val wireMockHost = "localhost"
   val url = s"http://$wireMockHost:$wireMockPort"
   val appRouteContext: String = "/create"

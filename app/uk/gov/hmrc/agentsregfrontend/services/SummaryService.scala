@@ -17,13 +17,14 @@
 package uk.gov.hmrc.agentsregfrontend.services
 
 import uk.gov.hmrc.agentsregfrontend.connectors.AgentConnector
-import uk.gov.hmrc.agentsregfrontend.models.RegisteringUser
+import uk.gov.hmrc.agentsregfrontend.models.{Agent, RegisteringUser}
+
 import javax.inject.Inject
 import scala.concurrent.Future
 
 class SummaryService @Inject()(connector: AgentConnector){
 
-  def agentDetails(agent: RegisteringUser): Future[Boolean] ={
+  def agentDetails(agent: RegisteringUser): Future[Option[Agent]] ={
     connector.createAgent(agent)
   }
 

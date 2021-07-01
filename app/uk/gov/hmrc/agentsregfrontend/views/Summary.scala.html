@@ -2,25 +2,24 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @this(layout: Layout, govukSummaryList : GovukSummaryList)
 
-@(userDetails: RegisteringUser)(implicit request: Request[_], messages: Messages)
+@(user: RegisteringUser)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Summary")) {
 <a href="/example-frontend/date" class="govuk-back-link">Back</a>
 <h1 class="govuk-heading-xl">Summary</h1>
-
 @govukSummaryList(SummaryList(
 rows = Seq(
 SummaryListRow(
 key = Key(
-content = Text("Name")
+content = Text("Business Name")
 ),
 value = Value(
-content = Text("Sarah Philips")
+content = Text(user.businessName)
 ),
 actions = Some(Actions(
 items = Seq(
 ActionItem(
-href = "#",
+href = "@uk.gov.hmrc.agentsregfrontend.controllers.routes.BusinessNameController.displayBusinessNamePage()",
 content = Text("Change"),
 visuallyHiddenText = Some("name")
 )
@@ -29,10 +28,10 @@ visuallyHiddenText = Some("name")
 ),
 SummaryListRow(
 key = Key(
-content = Text("Date of birth")
+content = Text("Email")
 ),
 value = Value(
-content = Text("5 January 1978")
+content = Text(user.email)
 ),
 actions = Some(Actions(
 items = Seq(
@@ -46,10 +45,10 @@ visuallyHiddenText = Some("date of birth")
 ),
 SummaryListRow(
 key = Key(
-content = Text("Contact information")
+content = Text("Contact Number")
 ),
 value = Value(
-content = HtmlContent("""72 Guild Street<br>London<br>SE23 6FH""")
+content = Text(user.mobileNumber.toString())
 ),
 actions = Some(Actions(
 items = Seq(
@@ -63,10 +62,27 @@ visuallyHiddenText = Some("contact information")
 ),
 SummaryListRow(
 key = Key(
-content = Text("Contact details")
+content = Text("Correspondence")
 ),
 value = Value(
-content = HtmlContent("""<p class="govuk-body">07700 900457</p><p class="govuk-body">sarah.phillips@example.com</p>""")
+content = Text(user.moc.mkString(", "))
+),
+actions = Some(Actions(
+items = Seq(
+ActionItem(
+href = "#",
+content = Text("Change"),
+visuallyHiddenText = Some("contact details")
+)
+)
+))
+),
+SummaryListRow(
+key = Key(
+content = Text("Address")
+),
+value = Value(
+content = Text(user.propertyNumber+", "+user.postcode)
 ),
 actions = Some(Actions(
 items = Seq(
@@ -80,5 +96,7 @@ visuallyHiddenText = Some("contact details")
 )
 )
 ))
-
+<form action="@uk.gov.hmrc.agentsregfrontend.controllers.routes.SummaryController.getArn()">
+    <button class="govuk-button" data-module="govuk-button">Submit</button>
+</form>
 }

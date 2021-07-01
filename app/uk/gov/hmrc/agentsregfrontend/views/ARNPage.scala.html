@@ -1,0 +1,17 @@
+@import uk.gov.hmrc.agentsregfrontend.models.Agent
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@this(layout: Layout)
+
+@(arn: String)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = Some("Summary")) {
+<div class="govuk-panel govuk-panel--confirmation">
+    <h1 class="govuk-panel__title">
+        Application complete
+    </h1>
+    <div class="govuk-panel__body">
+        Your Agent Reference Number:<br><strong>@arn</strong>
+    </div>
+</div>
+
+}

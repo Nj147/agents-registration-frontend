@@ -33,3 +33,4 @@ POST       /correspondence          uk.gov.hmrc.agentsregfrontend.controllers.Co
 
 GET        /summary                 uk.gov.hmrc.agentsregfrontend.controllers.SummaryController.summary
 
+GET        /arn                     uk.gov.hmrc.agentsregfrontend.controllers.SummaryController.getArn
