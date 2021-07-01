@@ -19,6 +19,10 @@ GET        /businessName            uk.gov.hmrc.agentsregfrontend.controllers.Bu
 +nocsrf
 POST       /businessName            uk.gov.hmrc.agentsregfrontend.controllers.BusinessNameController.processBusinessName
 
+GET        /password                uk.gov.hmrc.agentsregfrontend.controllers.PasswordController.displayPasswordPage
++nocsrf
+POST       /password                uk.gov.hmrc.agentsregfrontend.controllers.PasswordController.processPassword
+
 GET        /address                 uk.gov.hmrc.agentsregfrontend.controllers.AddressController.displayAddressPage
 +nocsrf
 POST       /adress                  uk.gov.hmrc.agentsregfrontend.controllers.AddressController.processAddress

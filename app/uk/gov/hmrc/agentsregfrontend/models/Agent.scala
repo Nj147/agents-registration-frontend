@@ -60,24 +60,35 @@ object ContactNumber {
       )(ContactNumber.apply)(ContactNumber.unapply))
 }
 
-case class Address(propertyNumber: String, postcode: String) {
-  val encode = propertyNumber + "/" + postcode
-}
+case class Password(password: String, passwordCheck: String)
 
-object Address {
-  val addressForm: Form[Address] =
+object Password {
+  val passwordForm: Form[Password] =
     Form(
       mapping(
-        "propertyNumber" -> nonEmptyText,
-        "postcode" -> nonEmptyText
-      )(Address.apply)(Address.unapply))
+        "password" -> nonEmptyText,
+        "passwordCheck" -> nonEmptyText
+      )(Password.apply)(Password.unapply))
+}
 
-  def decode(string: String): Address = {
-    val (n, p): (String, String) = string.split("/").toList match {
-      case h :: t :: _ => h -> t
-    }
-    Address(n, p)
+  case class Address(propertyNumber: String, postcode: String) {
+    val encode = propertyNumber + "/" + postcode
   }
+
+  object Address {
+    val addressForm: Form[Address] =
+      Form(
+        mapping(
+          "propertyNumber" -> nonEmptyText,
+          "postcode" -> nonEmptyText
+        )(Address.apply)(Address.unapply))
+
+    def decode(string: String): Address = {
+      val (n, p): (String, String) = string.split("/").toList match {
+        case h :: t :: _ => h -> t
+      }
+      Address(n, p)
+    }
 }
 
 case class Correspondence(modes: List[String]) {
