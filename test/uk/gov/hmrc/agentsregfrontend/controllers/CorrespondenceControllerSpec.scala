@@ -1,11 +1,11 @@
 package uk.gov.hmrc.agentsregfrontend.controllers
 
-import com.sun.tools.attach.VirtualMachine.list
 import org.jsoup.Jsoup
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
+import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, session, status}
@@ -39,20 +39,26 @@ class CorrespondenceControllerSpec extends AnyWordSpec with Matchers with GuiceO
       val result = controller.displayCorrespondencePage(getfakeRequest)
       Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-checkboxes__item").size shouldBe 4
     }
+    "redirect if the user is logged in" in {
+      val result = controller.displayCorrespondencePage(getfakeRequest.withSession("arn" -> "ARN0000001"))
+      status(result) shouldBe SEE_OTHER
+    }
   }
 
   "POST /correspondence" should {
-    "return 303 redirect" in {
+    "return 303 redirect with added session values" in {
       val result = controller.processCorrespondence(postfakeRequest.withFormUrlEncodedBody("modes[]" -> "call"))
-      status(result) shouldBe 303
+      status(result) shouldBe SEE_OTHER
+      session(result).get("modes") shouldBe Some("call,text")
     }
     "return session variables" in {
       val result = controller.processCorrespondence(postfakeRequest.withFormUrlEncodedBody("modes[]" -> "call,text"))
-      session(result).get("modes") shouldBe Some("call,text")
+
     }
-    "return nothing in session when form is left empty" in {
+    "return bad request when form is left empty" in {
       val result = controller.processCorrespondence(postfakeRequest.withFormUrlEncodedBody("modes[]" -> ""))
       session(result).isEmpty
+      status(result) shouldBe BAD_REQUEST
     }
   }
 

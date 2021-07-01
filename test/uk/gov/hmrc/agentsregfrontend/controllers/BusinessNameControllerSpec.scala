@@ -5,6 +5,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
+import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{charset, contentAsString, contentType, defaultAwaitTimeout, session, status}
@@ -38,24 +39,22 @@ class BusinessNameControllerSpec extends AnyWordSpec with Matchers with GuiceOne
         val result = controller.displayBusinessNamePage(getfakeRequest)
         Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
       }
+      "redirect if the user is logged in" in {
+        val result = controller.displayBusinessNamePage(getfakeRequest.withSession("arn" -> "ARN0000001"))
+        status(result) shouldBe SEE_OTHER
+      }
     }
 
     "POST /businessName" should {
-      "return 303 redirect" in {
+      "return 303 redirect with added session values" in {
         val result = controller.processBusinessName(postfakeRequest.withFormUrlEncodedBody("businessName" -> "testBusinessName"))
-        status(result) shouldBe 303
-      }
-      "return session variables" in {
-        val result = controller.processBusinessName(postfakeRequest.withFormUrlEncodedBody("businessName" -> "testBusinessName"))
+        status(result) shouldBe SEE_OTHER
         session(result).get("businessName") shouldBe Some("testBusinessName")
       }
-      "return nothing in session when form is left empty" in {
+      "return bad request with nothing in session when form is left empty" in {
         val result = controller.processBusinessName(postfakeRequest.withFormUrlEncodedBody("businessName" -> ""))
         session(result).isEmpty
-      }
-      "return 400" in {
-        val result = controller.processBusinessName(postfakeRequest.withFormUrlEncodedBody("businessName" -> ""))
-        status(result) shouldBe 400
+        status(result) shouldBe BAD_REQUEST
       }
     }
   }

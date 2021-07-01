@@ -27,7 +27,10 @@ class AddressController @Inject()(mcc: MessagesControllerComponents, addressPage
   extends FrontendController(mcc) {
 
   val displayAddressPage: Action[AnyContent] = Action { implicit request =>
-    Ok(addressPage(Address.addressForm))
+    request.session.get("arn") match {
+      case Some(arn) => Redirect("http://localhost:9005/agents-frontend/dashboard")
+      case None => Ok(addressPage(Address.addressForm))
+    }
   }
 
   val processAddress: Action[AnyContent] = Action { implicit request =>

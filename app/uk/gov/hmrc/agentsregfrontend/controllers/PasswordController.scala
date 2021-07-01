@@ -25,7 +25,10 @@ import javax.inject.Inject
 class PasswordController @Inject()(mcc: MessagesControllerComponents, passwordPage: PasswordPage) extends FrontendController(mcc) {
 
   val displayPasswordPage: Action[AnyContent] = Action { implicit request =>
-    Ok(passwordPage(Password.passwordForm))
+    request.session.get("arn") match {
+      case Some(arn) => Redirect("http://localhost:9005/agents-frontend/dashboard")
+      case None => Ok(passwordPage(Password.passwordForm))
+    }
   }
 
   def processPassword: Action[AnyContent] = Action { implicit request =>

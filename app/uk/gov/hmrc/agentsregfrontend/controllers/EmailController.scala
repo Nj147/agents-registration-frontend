@@ -27,7 +27,10 @@ class EmailController @Inject()(mcc: MessagesControllerComponents,
   extends FrontendController(mcc) {
 
   val displayEmailPage: Action[AnyContent] = Action { implicit request =>
-    Ok(emailPage(Email.emailForm))
+    request.session.get("arn") match {
+      case Some(arn) => Redirect("http://localhost:9005/agents-frontend/dashboard")
+      case None => Ok(emailPage(Email.emailForm))
+    }
   }
 
   val processEmail: Action[AnyContent] = Action { implicit request =>

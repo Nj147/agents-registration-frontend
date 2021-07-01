@@ -28,7 +28,10 @@ class ContactNumberController @Inject()(mcc: MessagesControllerComponents,
   extends FrontendController(mcc) {
 
   val displayContactPage: Action[AnyContent] = Action { implicit request =>
-    Ok(cnPage(ContactNumber.contactForm))
+    request.session.get("arn") match {
+      case Some(arn) => Redirect("http://localhost:9005/agents-frontend/dashboard")
+      case None => Ok(cnPage(ContactNumber.contactForm))
+    }
   }
 
   val processContactNumber: Action[AnyContent] = Action { implicit request =>

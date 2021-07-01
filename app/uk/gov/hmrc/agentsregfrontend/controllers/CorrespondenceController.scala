@@ -26,7 +26,10 @@ import javax.inject.Inject
 class CorrespondenceController @Inject()(mcc: MessagesControllerComponents, page: CorrespondencePage) extends FrontendController(mcc) {
 
   def displayCorrespondencePage: Action[AnyContent] = Action { implicit request =>
-    Ok(page(Correspondence.correspondenceForm))
+    request.session.get("arn") match {
+      case Some(arn) => Redirect("http://localhost:9005/agents-frontend/dashboard")
+      case None => Ok(page(Correspondence.correspondenceForm))
+    }
   }
 
   def processCorrespondence: Action[AnyContent] = Action { implicit request =>

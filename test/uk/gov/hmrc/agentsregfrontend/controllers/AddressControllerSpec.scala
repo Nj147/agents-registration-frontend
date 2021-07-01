@@ -38,6 +38,10 @@ class AddressControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPe
       val result = controller.displayAddressPage(fakeRequest)
       Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 2
     }
+    "redirect if the user is logged in" in {
+      val result = controller.displayAddressPage(fakeRequest.withSession("arn" -> "ARN0000001"))
+      status(result) shouldBe Status.SEE_OTHER
+    }
   }
 
   "POST /address" should {
