@@ -33,7 +33,7 @@ class AddressController @Inject()(mcc: MessagesControllerComponents, addressPage
   val processAddress: Action[AnyContent] = Action { implicit request =>
     Address.addressForm.bindFromRequest().fold(
       formWithErrors => BadRequest(addressPage(formWithErrors))
-      , response => Redirect(routes.AddressController.displayAddressPage()).withSession(request.session + ("address" -> response.encode))
+      , response => Redirect(routes.CorrespondenceController.displayCorrespondencePage()).withSession(request.session + ("address" -> response.encode))
     )
   }
 }

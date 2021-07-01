@@ -4,7 +4,7 @@
 
 @(form: Form[Correspondence])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("Contact Details")) {
+@layout(pageTitle = Some("Correspondence")) {
   <a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
 
 @if(form.errors.nonEmpty) {

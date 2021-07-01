@@ -4,7 +4,7 @@
 
 @(form: Form[Email])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("Contact Details")) {
+@layout(pageTitle = Some("Email")) {
 <a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
 <h1 class="govuk-heading-xl">Enter Email Address </h1>
 @if(form.errors.nonEmpty) {
