@@ -33,7 +33,7 @@ class EmailController @Inject()(mcc: MessagesControllerComponents,
   val processEmail: Action[AnyContent] = Action { implicit request =>
     Email.emailForm.bindFromRequest().fold(
       formWithErrors => BadRequest(emailPage(formWithErrors))
-      ,email => Redirect(routes.EmailController.displayEmailPage()).withSession(request.session + ("email" -> email.email))
+      ,email => Redirect(routes.ContactNumberController.displayContactPage()).withSession(request.session + ("email" -> email.email))
     )
   }
 }

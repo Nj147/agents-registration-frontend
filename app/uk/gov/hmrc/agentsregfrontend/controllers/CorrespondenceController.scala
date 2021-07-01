@@ -33,8 +33,7 @@ class CorrespondenceController @Inject()(mcc: MessagesControllerComponents, page
     Correspondence.correspondenceForm.bindFromRequest().fold(
       formWithErrors => BadRequest(page(formWithErrors)),
       response => {
-        println(response)
-        Redirect(routes.CorrespondenceController.displayCorrespondencePage()).withSession(request.session + ("modes" -> response.encode))
+        Redirect(routes.PasswordController.displayPasswordPage()).withSession(request.session + ("modes" -> response.encode))
       }
     )
   }

@@ -34,7 +34,7 @@ class ContactNumberController @Inject()(mcc: MessagesControllerComponents,
   val processContactNumber: Action[AnyContent] = Action { implicit request =>
     ContactNumber.contactForm.bindFromRequest().fold(
       formWithErrors => BadRequest(cnPage(formWithErrors))
-      ,number => Redirect(routes.ContactNumberController.displayContactPage()).withSession(request.session + ("contactNumber" -> number.number.toString))
+      ,number => Redirect(routes.AddressController.displayAddressPage()).withSession(request.session + ("contactNumber" -> number.number.toString))
     )
   }
 }
