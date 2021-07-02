@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.agentsregfrontend.connectors
 
-import play.api.libs.json.{JsArray, Json}
+import play.api.libs.json.{JsArray, JsValue, Json}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.agentsregfrontend.models.{Agent, RegisteringUser}
+
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -31,4 +32,5 @@ class AgentConnector @Inject()(ws: WSClient) {
         Some(Agent(response.body))}
       }.recover{case _ => None}
   }
+
 }

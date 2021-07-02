@@ -2,10 +2,10 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @this(layout: Layout, govukInput : GovukInput, govukErrorSummary : GovukErrorSummary, govukButton: GovukButton)
 
-@(form: Form[BusinessName])(implicit request: Request[_], messages: Messages)
+@(form: Form[BusinessName], isUpdate: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Business Name Details")) {
-<a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
+<a href="@request.headers.get("referer") class="govuk-back-link">Back</a>
 <h1 class="govuk-heading-xl">Enter Business Name:</h1>
 @if(form.errors.nonEmpty) {
     @defining(form.errors.map { error =>
@@ -16,8 +16,7 @@
         ))
     }
 }
-@helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.BusinessNameController.processBusinessName()) {
-
+@helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.BusinessNameController.processBusinessName(isUpdate)) {
 <div class="govuk-form-group">
     @if(form.errors("businessName").nonEmpty) {
         @govukInput(Input(

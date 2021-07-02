@@ -15,9 +15,9 @@ GET        /contactNumber/:isUpdate          uk.gov.hmrc.agentsregfrontend.contr
 +nocsrf
 POST       /contactNumber/:isUpdate            uk.gov.hmrc.agentsregfrontend.controllers.ContactNumberController.processContactNumber(isUpdate: Boolean)
 
-GET        /businessName            uk.gov.hmrc.agentsregfrontend.controllers.BusinessNameController.displayBusinessNamePage
+GET        /businessName/:isUpdate            uk.gov.hmrc.agentsregfrontend.controllers.BusinessNameController.displayBusinessNamePage(isUpdate: Boolean)
 +nocsrf
-POST       /businessName            uk.gov.hmrc.agentsregfrontend.controllers.BusinessNameController.processBusinessName
+POST       /businessName/:isUpdate            uk.gov.hmrc.agentsregfrontend.controllers.BusinessNameController.processBusinessName(isUpdate: Boolean)
 
 GET        /password                uk.gov.hmrc.agentsregfrontend.controllers.PasswordController.displayPasswordPage
 +nocsrf
