@@ -21,6 +21,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
+import play.api.http.Status
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{FakeRequest, Helpers}
@@ -75,6 +76,10 @@ class CorrespondenceControllerSpec extends AnyWordSpec with Matchers with GuiceO
       val result = controller.processCorrespondence(isUpdate = false).apply(postfakeRequest.withFormUrlEncodedBody())
       session(result).isEmpty
       status(result) shouldBe BAD_REQUEST
+    }
+    "send to Summary page with OK status if update" in {
+      val result = controller.processCorrespondence(isUpdate = true).apply(postfakeRequest.withFormUrlEncodedBody("modes[]" -> "call,text").withSession("address" -> "blah/DED2"))
+      status(result) shouldBe Status.OK
     }
   }
 
