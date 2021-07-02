@@ -23,11 +23,10 @@ import uk.gov.hmrc.agentsregfrontend.services.SummaryService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.agentsregfrontend.views.html.Summary
 import uk.gov.hmrc.agentsregfrontend.views.html.ARNPage
-
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class SummaryController @Inject()(mcc: MessagesControllerComponents, service: SummaryService, summarypage: Summary, arnPage: ARNPage, connector: AgentConnector) extends FrontendController(mcc) {
+class SummaryController @Inject()(mcc: MessagesControllerComponents, service: SummaryService, summarypage: Summary, arnPage: ARNPage) extends FrontendController(mcc) {
 
   def summary: Action[AnyContent] = Action{ implicit request =>
     val businessName = request.session.get("businessName").get
