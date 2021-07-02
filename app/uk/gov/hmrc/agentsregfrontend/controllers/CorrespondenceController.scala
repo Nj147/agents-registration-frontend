@@ -36,9 +36,9 @@ class CorrespondenceController @Inject()(mcc: MessagesControllerComponents, page
     Correspondence.correspondenceForm.bindFromRequest().fold(
       formWithErrors => BadRequest(page(formWithErrors)),
       response => {
-        response.modes.size match {
-          case 0 => BadRequest(page(Correspondence.correspondenceForm.withError("modes", "Please select at least one method of correspondence")))
-          case _ => Redirect(routes.PasswordController.displayPasswordPage()).withSession(request.session + ("modes" -> response.encode))
+        response.modes.isEmpty match {
+          case true => BadRequest(page(Correspondence.correspondenceForm.withError("modes", "Please select at least one method of correspondence")))
+          case false => Redirect(routes.PasswordController.displayPasswordPage()).withSession(request.session + ("modes" -> response.encode))
         }
       }
     )
