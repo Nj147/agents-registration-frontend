@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @this(layout: Layout, govukInput : GovukInput, govukErrorSummary : GovukErrorSummary, govukButton: GovukButton)
 
-@(form: Form[ContactNumber])(implicit request: Request[_], messages: Messages)
+@(form: Form[ContactNumber], isUpdate: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Contact Number")) {
     <a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
@@ -16,7 +16,7 @@
         ))
         }
     }
-    @helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.ContactNumberController.processContactNumber()) {
+    @helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.ContactNumberController.processContactNumber(isUpdate)) {
 
         <div class="govuk-form-group">
             @if(form.errors("number").nonEmpty) {

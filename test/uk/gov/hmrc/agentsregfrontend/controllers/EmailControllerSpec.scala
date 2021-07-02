@@ -41,31 +41,31 @@ class EmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerS
 
   "GET /email" should {
     "return 200" in {
-      val result = controller.displayEmailPage(fakeRequest)
+      val result = controller.displayEmailPage(isUpdate = false).apply(fakeRequest)
       status(result) shouldBe OK
     }
     "return HTML" in {
-      val result = controller.displayEmailPage(fakeRequest)
+      val result = controller.displayEmailPage(isUpdate = false).apply(fakeRequest)
       contentType(result) shouldBe Some("text/html")
       charset(result)     shouldBe Some("utf-8")
     }
     "return a page with 1 input" in {
-      val result = controller.displayEmailPage(fakeRequest)
+      val result = controller.displayEmailPage(isUpdate = false).apply(fakeRequest)
       Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
     }
     "redirect if the user is logged in" in {
-      val result = controller.displayEmailPage(fakeRequest.withSession("arn" -> "ARN0000001"))
+      val result = controller.displayEmailPage(isUpdate = false).apply(fakeRequest.withSession("arn" -> "ARN0000001"))
       status(result) shouldBe SEE_OTHER
     }
   }
 
   "POST /email" should {
     "return a bad request if invalid value input" in {
-      val result = controller.processEmail(fakeRequest.withFormUrlEncodedBody("email" -> ""))
+      val result = controller.processEmail(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("email" -> ""))
       status(result) shouldBe BAD_REQUEST
     }
     "redirect if valid value input with session data" in {
-      val result = controller.processEmail(fakeRequest.withFormUrlEncodedBody("email" -> "test@test.com"))
+      val result = controller.processEmail(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("email" -> "test@test.com"))
       status(result) shouldBe SEE_OTHER
       session(result).get("email").get shouldBe "test@test.com"
     }

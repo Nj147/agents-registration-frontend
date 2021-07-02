@@ -43,32 +43,32 @@ class BusinessNameControllerSpec extends AnyWordSpec with Matchers with GuiceOne
 
     "GET /businessName" should {
       "return 200" in {
-        val result = controller.displayBusinessNamePage(getfakeRequest)
+        val result = controller.displayBusinessNamePage(isUpdate = false).apply(getfakeRequest)
         status(result) shouldBe 200
       }
       "return HTML" in {
-        val result = controller.displayBusinessNamePage(getfakeRequest)
+        val result = controller.displayBusinessNamePage(isUpdate = false).apply(getfakeRequest)
         contentType(result) shouldBe Some("text/html")
         charset(result)     shouldBe Some("utf-8")
       }
       "return a page with 1 input" in {
-        val result = controller.displayBusinessNamePage(getfakeRequest)
+        val result = controller.displayBusinessNamePage(isUpdate = false).apply(getfakeRequest)
         Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
       }
       "redirect if the user is logged in" in {
-        val result = controller.displayBusinessNamePage(getfakeRequest.withSession("arn" -> "ARN0000001"))
+        val result = controller.displayBusinessNamePage(isUpdate = false).apply(getfakeRequest.withSession("arn" -> "ARN0000001"))
         status(result) shouldBe SEE_OTHER
       }
     }
 
     "POST /businessName" should {
       "return 303 redirect with added session values" in {
-        val result = controller.processBusinessName(postfakeRequest.withFormUrlEncodedBody("businessName" -> "testBusinessName"))
+        val result = controller.processBusinessName(isUpdate = false).apply(postfakeRequest.withFormUrlEncodedBody("businessName" -> "testBusinessName"))
         status(result) shouldBe SEE_OTHER
         session(result).get("businessName") shouldBe Some("testBusinessName")
       }
       "return bad request with nothing in session when form is left empty" in {
-        val result = controller.processBusinessName(postfakeRequest.withFormUrlEncodedBody("businessName" -> ""))
+        val result = controller.processBusinessName(isUpdate = false).apply(postfakeRequest.withFormUrlEncodedBody("businessName" -> ""))
         session(result).isEmpty
         status(result) shouldBe BAD_REQUEST
       }

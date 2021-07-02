@@ -42,31 +42,31 @@ class AddressControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPe
 
   "GET /address" should {
     "return 200" in {
-      val result = controller.displayAddressPage(fakeRequest)
+      val result = controller.displayAddressPage(isUpdate = false).apply(fakeRequest)
       status(result) shouldBe Status.OK
     }
     "return HTML" in {
-      val result = controller.displayAddressPage(fakeRequest)
+      val result = controller.displayAddressPage(isUpdate = false).apply(fakeRequest)
       contentType(result) shouldBe Some("text/html")
       charset(result)     shouldBe Some("utf-8")
     }
     "return a page with 2 inputs" in {
-      val result = controller.displayAddressPage(fakeRequest)
+      val result = controller.displayAddressPage(isUpdate = false).apply(fakeRequest)
       Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 2
     }
     "redirect if the user is logged in" in {
-      val result = controller.displayAddressPage(fakeRequest.withSession("arn" -> "ARN0000001"))
+      val result = controller.displayAddressPage(isUpdate = false).apply(fakeRequest.withSession("arn" -> "ARN0000001"))
       status(result) shouldBe Status.SEE_OTHER
     }
   }
 
   "POST /address" should {
     "return a bad request if one or more invalid value input" in {
-      val result = controller.processAddress(fakeRequest.withFormUrlEncodedBody("propertyNumber" -> "1 New Street", "postcode" -> ""))
+      val result = controller.processAddress(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("propertyNumber" -> "1 New Street", "postcode" -> ""))
       status(result) shouldBe 400
     }
     "redirect if valid value input with new sessions data" in {
-      val result = controller.processAddress(fakeRequest.withFormUrlEncodedBody("propertyNumber" -> testAddress.propertyNumber, "postcode" -> testAddress.postcode))
+      val result = controller.processAddress(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("propertyNumber" -> testAddress.propertyNumber, "postcode" -> testAddress.postcode))
       status(result) shouldBe 303
       Address.decode(session(result).get("address").get) shouldBe testAddress
     }

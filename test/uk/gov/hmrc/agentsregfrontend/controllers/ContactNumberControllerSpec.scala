@@ -41,31 +41,31 @@ class ContactNumberControllerSpec extends AnyWordSpec with Matchers with GuiceOn
 
   "GET /contactNumber" should {
     "return 200" in {
-      val result = controller.displayContactPage(fakeRequest)
+      val result = controller.displayContactPage(isUpdate = false).apply(fakeRequest)
       status(result) shouldBe OK
     }
     "return HTML" in {
-      val result = controller.displayContactPage(fakeRequest)
+      val result = controller.displayContactPage(isUpdate = false).apply(fakeRequest)
       contentType(result) shouldBe Some("text/html")
       charset(result)     shouldBe Some("utf-8")
     }
     "return a page with 1 input" in {
-      val result = controller.displayContactPage(fakeRequest)
+      val result = controller.displayContactPage(isUpdate = false).apply(fakeRequest)
       Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
     }
     "redirect if the user is logged in" in {
-      val result = controller.displayContactPage(fakeRequest.withSession("arn" -> "ARN0000001"))
+      val result = controller.displayContactPage(isUpdate = false).apply(fakeRequest.withSession("arn" -> "ARN0000001"))
       status(result) shouldBe SEE_OTHER
     }
   }
 
   "POST /contactNumber" should {
     "return a bad request if an invalid contact number is input" in {
-      val result = controller.processContactNumber(fakeRequest.withFormUrlEncodedBody("number" -> ""))
+      val result = controller.processContactNumber(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("number" -> ""))
       status(result) shouldBe BAD_REQUEST
     }
     "redirect when given a valid form value, and add to the session data" in {
-      val result = controller.processContactNumber(fakeRequest.withFormUrlEncodedBody("number" -> "012345678"))
+      val result = controller.processContactNumber(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("number" -> "012345678"))
       status(result) shouldBe SEE_OTHER
       session(result).get("contactNumber").get shouldBe "12345678"
     }
