@@ -26,15 +26,20 @@ import javax.inject.Inject
 class CorrespondenceController @Inject()(mcc: MessagesControllerComponents, page: CorrespondencePage) extends FrontendController(mcc) {
 
   def displayCorrespondencePage: Action[AnyContent] = Action { implicit request =>
-    Ok(page(Correspondence.correspondenceForm))
+    request.session.get("arn") match {
+      case Some(arn) => Redirect("http://localhost:9005/agents-frontend/dashboard")
+      case None => Ok(page(Correspondence.correspondenceForm))
+    }
   }
 
   def processCorrespondence: Action[AnyContent] = Action { implicit request =>
     Correspondence.correspondenceForm.bindFromRequest().fold(
       formWithErrors => BadRequest(page(formWithErrors)),
       response => {
-        println(response)
-        Redirect(routes.CorrespondenceController.displayCorrespondencePage()).withSession(request.session + ("modes" -> response.encode))
+        response.modes.isEmpty match {
+          case true => BadRequest(page(Correspondence.correspondenceForm.withError("modes", "Please select at least one method of correspondence")))
+          case false => Redirect(routes.PasswordController.displayPasswordPage()).withSession(request.session + ("modes" -> response.encode))
+        }
       }
     )
   }

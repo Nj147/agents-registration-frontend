@@ -5,44 +5,44 @@
 @(form: Form[BusinessName])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Business Name Details")) {
-<a href="/example-frontend/date" class="govuk-back-link">Back</a>
+<a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
 <h1 class="govuk-heading-xl">Enter Business Name:</h1>
 @if(form.errors.nonEmpty) {
-@defining(form.errors.map { error =>
-ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))
-}) { errorLinks => @govukErrorSummary(ErrorSummary(
-errorList = errorLinks,
-title = Text(messages("error.summary.title"))
-))
+    @defining(form.errors.map { error =>
+        ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))
+        }) {errorLinks => @govukErrorSummary(ErrorSummary(
+        errorList = errorLinks,
+        title = Text(messages("error.summary.title"))
+        ))
+    }
 }
-}
-@helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.BusinessNameController.displayBusinessNamePage()) {
+@helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.BusinessNameController.processBusinessName()) {
 
 <div class="govuk-form-group">
     @if(form.errors("businessName").nonEmpty) {
-    @govukInput(Input(
-    id = "businessName",
-    name = "businessName",
-    classes = "govuk-input--width-10",
-    errorMessage = Some(ErrorMessage(
-    content = Text("Please enter a valid business Name"))),
-    label = Label(
-    isPageHeading = true,
-    classes = "govuk-label--m",
-    content = Text("Busines Name")
-    )
-    ))
+        @govukInput(Input(
+        id = "businessName",
+        name = "businessName",
+        classes = "govuk-input--width-10",
+        errorMessage = Some(ErrorMessage(
+        content = Text("Please enter a valid business Name"))),
+        label = Label(
+        isPageHeading = true,
+        classes = "govuk-label--m",
+        content = Text("Busines Name")
+        )
+        ))
     } else {
-    @govukInput(Input(
-    id = "businessName",
-    name = "businessName",
-    classes = "govuk-input--width-10",
-    label = Label(
-    isPageHeading = true,
-    classes = "govuk-label--m",
-    content = Text("Business Name")
-    )
-    ))
+        @govukInput(Input(
+        id = "businessName",
+        name = "businessName",
+        classes = "govuk-input--width-10",
+        label = Label(
+        isPageHeading = true,
+        classes = "govuk-label--m",
+        content = Text("Business Name")
+        )
+        ))
     }
     <br>
     <button id="next-button" class="govuk-button" data-module="govuk-button">

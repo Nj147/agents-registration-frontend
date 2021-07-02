@@ -27,13 +27,16 @@ class BusinessNameController @Inject()(mcc: MessagesControllerComponents, busine
   extends FrontendController(mcc) {
 
   val displayBusinessNamePage: Action[AnyContent] = Action { implicit request =>
-    Ok(businessNamePage(BusinessName.form))
+    request.session.get("arn") match {
+      case Some(arn) => Redirect("http://localhost:9005/agents-frontend/dashboard")
+      case None =>  Ok(businessNamePage(BusinessName.form))
+    }
   }
 
   val processBusinessName: Action[AnyContent] = Action { implicit request =>
     BusinessName.form.bindFromRequest().fold(
       formWithErrors => BadRequest(businessNamePage(formWithErrors))
-      , response => Redirect(routes.BusinessNameController.displayBusinessNamePage()).withSession(request.session + ("businessName" -> response.businessName))
+      , response => Redirect(routes.EmailController.displayEmailPage()).withSession(request.session + ("businessName" -> response.businessName))
     )
   }
 }

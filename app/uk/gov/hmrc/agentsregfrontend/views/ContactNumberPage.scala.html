@@ -4,8 +4,8 @@
 
 @(form: Form[ContactNumber])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("Contact Details")) {
-    <a href="/example-frontend/date" class="govuk-back-link">Back</a>
+@layout(pageTitle = Some("Contact Number")) {
+    <a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
     <h1 class="govuk-heading-xl">Enter Contact Number</h1>
     @if(form.errors.nonEmpty) {
         @defining(form.errors.map { error =>
