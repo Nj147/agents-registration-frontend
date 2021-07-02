@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @this(layout: Layout, govukInput : GovukInput, govukErrorSummary : GovukErrorSummary, govukButton: GovukButton)
 
-@(form: Form[Email])(implicit request: Request[_], messages: Messages)
+@(form: Form[Email], isUpdate: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Email")) {
 <a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
@@ -16,7 +16,7 @@ title = Text(messages("error.summary.title"))
 ))
 }
 }
-@helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.EmailController.processEmail()) {
+@helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.EmailController.processEmail(isUpdate)) {
 
 <div class="govuk-form-group">
     @if(form.errors("email").nonEmpty) {
