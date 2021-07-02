@@ -48,9 +48,9 @@ class SummaryController @Inject()(mcc: MessagesControllerComponents, service: Su
     val correspondence = Correspondence.decode(request.session.get("modes").get)
     val password = request.session.get("password").get
     val user = RegisteringUser(password, businessName, email, contactNumber.toInt, correspondence, address.propertyNumber, address.postcode)
-    connector.createAgent(user).map( x => {
+    service.agentDetails(user).map( x => {
       println("Controller"+x)
-      Ok(arnPage(x.get.arn.replace("\"", "")))
+      Ok(arnPage(x))
     }
     )
   }

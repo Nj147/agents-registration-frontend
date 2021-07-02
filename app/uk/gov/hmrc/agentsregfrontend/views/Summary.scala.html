@@ -19,7 +19,7 @@ content = Text(user.businessName)
 actions = Some(Actions(
 items = Seq(
 ActionItem(
-href = "@uk.gov.hmrc.agentsregfrontend.controllers.routes.BusinessNameController.displayBusinessNamePage()",
+href = "/registration/businessName",
 content = Text("Change"),
 visuallyHiddenText = Some("name")
 )
@@ -36,7 +36,7 @@ content = Text(user.email)
 actions = Some(Actions(
 items = Seq(
 ActionItem(
-href = "#",
+href = "/registration/email",
 content = Text("Change"),
 visuallyHiddenText = Some("date of birth")
 )
@@ -53,7 +53,7 @@ content = Text(user.mobileNumber.toString())
 actions = Some(Actions(
 items = Seq(
 ActionItem(
-href = "#",
+href = "/registration/contactNumber",
 content = Text("Change"),
 visuallyHiddenText = Some("contact information")
 )
@@ -70,7 +70,7 @@ content = Text(user.moc.mkString(", "))
 actions = Some(Actions(
 items = Seq(
 ActionItem(
-href = "#",
+href = "/registration/correspondence",
 content = Text("Change"),
 visuallyHiddenText = Some("contact details")
 )
@@ -87,7 +87,7 @@ content = Text(user.propertyNumber+", "+user.postcode)
 actions = Some(Actions(
 items = Seq(
 ActionItem(
-href = "#",
+href = "/registration/address",
 content = Text("Change"),
 visuallyHiddenText = Some("contact details")
 )
