@@ -21,10 +21,12 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
+import play.api.http.Status
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{charset, contentAsString, contentType, defaultAwaitTimeout, session, status}
+import uk.gov.hmrc.agentsregfrontend.models.Address
 
 class BusinessNameControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
@@ -38,6 +40,8 @@ class BusinessNameControllerSpec extends AnyWordSpec with Matchers with GuiceOne
 
     private val getfakeRequest = FakeRequest("GET", "/")
     private val postfakeRequest = FakeRequest("POST", "/")
+
+    private val testAddress = Address("1 New Address", "A01 2BC")
 
     private val controller = app.injector.instanceOf[BusinessNameController]
 
@@ -71,6 +75,10 @@ class BusinessNameControllerSpec extends AnyWordSpec with Matchers with GuiceOne
         val result = controller.processBusinessName(isUpdate = false).apply(postfakeRequest.withFormUrlEncodedBody("businessName" -> ""))
         session(result).isEmpty
         status(result) shouldBe BAD_REQUEST
+      }
+      "send to Summary page with OK status if update" in {
+        val result = controller.processBusinessName(isUpdate = true).apply(postfakeRequest.withFormUrlEncodedBody("businessName" -> "testBusinessName").withSession("address" -> "blah/DED2"))
+        status(result) shouldBe Status.OK
       }
     }
   }

@@ -21,6 +21,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
+import play.api.http.Status
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -68,6 +69,10 @@ class EmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerS
       val result = controller.processEmail(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("email" -> "test@test.com"))
       status(result) shouldBe SEE_OTHER
       session(result).get("email").get shouldBe "test@test.com"
+    }
+    "send to Summary page with OK status if update" in {
+      val result = controller.processEmail(isUpdate = true).apply(fakeRequest.withFormUrlEncodedBody("email" -> "test@test.com").withSession("address" -> "blah/DED2"))
+      status(result) shouldBe Status.OK
     }
   }
 

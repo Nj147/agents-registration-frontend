@@ -70,6 +70,10 @@ class AddressControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPe
       status(result) shouldBe 303
       Address.decode(session(result).get("address").get) shouldBe testAddress
     }
+    "send to Summary page with OK status if update" in {
+      val result = controller.processAddress(isUpdate = true).apply(fakeRequest.withFormUrlEncodedBody("propertyNumber" -> testAddress.propertyNumber, "postcode" -> testAddress.postcode))
+      status(result) shouldBe Status.OK
+    }
   }
 
 }

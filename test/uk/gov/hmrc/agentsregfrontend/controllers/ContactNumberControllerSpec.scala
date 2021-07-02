@@ -21,6 +21,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
+import play.api.http.Status
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -68,6 +69,10 @@ class ContactNumberControllerSpec extends AnyWordSpec with Matchers with GuiceOn
       val result = controller.processContactNumber(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("number" -> "012345678"))
       status(result) shouldBe SEE_OTHER
       session(result).get("contactNumber").get shouldBe "12345678"
+    }
+    "send to Summary page with OK status if update" in {
+      val result = controller.processContactNumber(isUpdate = true).apply(fakeRequest.withFormUrlEncodedBody("number" -> "0828232232").withSession("address" -> "blah/DED2"))
+      status(result) shouldBe Status.OK
     }
   }
 
