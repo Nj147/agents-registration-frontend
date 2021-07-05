@@ -4,12 +4,12 @@
 
 @(arn: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("Summary")) {
+@layout(pageTitle = Some("Successful Registration")) {
 <div class="govuk-panel govuk-panel--confirmation">
-    <h1 class="govuk-panel__title">
+    <h1 id="success" class="govuk-panel__title">
         Application complete
     </h1>
-    <div class="govuk-panel__body">
+    <div id="arn" class="govuk-panel__body">
         Your Agent Reference Number:<br><strong>@arn</strong>
     </div>
 </div>

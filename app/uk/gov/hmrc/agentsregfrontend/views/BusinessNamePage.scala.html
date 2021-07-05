@@ -5,7 +5,7 @@
 @(form: Form[BusinessName], isUpdate: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Business Name Details")) {
-<a href="@request.headers.get("referer") class="govuk-back-link">Back</a>
+<a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
 <h1 class="govuk-heading-xl">Enter Business Name:</h1>
 @if(form.errors.nonEmpty) {
     @defining(form.errors.map { error =>
@@ -28,7 +28,7 @@
         label = Label(
         isPageHeading = true,
         classes = "govuk-label--m",
-        content = Text("Busines Name")
+        content = Text("Business Name")
         )
         ))
     } else {
