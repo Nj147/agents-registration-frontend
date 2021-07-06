@@ -33,29 +33,26 @@ class CorrespondenceController @Inject()(mcc: MessagesControllerComponents, page
   }
 
   def processCorrespondence(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    Correspondence.correspondenceForm.bindFromRequest().fold(
-      formWithErrors => BadRequest(page(formWithErrors, false)),
-      response => {
-        response.modes.size match {
-          case 0 => BadRequest(page(Correspondence.correspondenceForm.withError("modes", "Please select at least one method of correspondence"), false))
-          case _ =>
-            if(isUpdate) {
-              val updatedRegUser = RegisteringUser(
-                request.session.get("password").getOrElse("NOT FOUND"),
-                request.session.get("businessName").getOrElse("NOT FOUND"),
-                request.session.get("email").getOrElse("NOT FOUND"),
-                request.session.get("mobileNumber").getOrElse("000").toInt,
-                response.modes,
-                Address.decode(request.session.get("address").get).propertyNumber,
-                Address.decode(request.session.get("address").get).postcode
-              )
-              Ok(summaryPage(updatedRegUser))
-            } else {
-              Redirect(routes.PasswordController.displayPasswordPage()).withSession(request.session + ("modes" -> response.encode))
-            }
+    val response = Correspondence.correspondenceForm.bindFromRequest.get
+    response.modes.size match {
+      case 0 => BadRequest(page(Correspondence.correspondenceForm.withError("modes", "Please select at least one method of correspondence"), isUpdate = false))
+      case _ =>
+        if (isUpdate) {
+          val updatedRegUser = RegisteringUser(
+            request.session.get("password").getOrElse("NOT FOUND"),
+            request.session.get("businessName").getOrElse("NOT FOUND"),
+            request.session.get("email").getOrElse("NOT FOUND"),
+            request.session.get("mobileNumber").getOrElse("000").toInt,
+            response.modes,
+            Address.decode(request.session.get("address").get).propertyNumber,
+            Address.decode(request.session.get("address").get).postcode
+          )
+          Ok(summaryPage(updatedRegUser))
+        } else {
+          Redirect(routes.PasswordController.displayPasswordPage()).withSession(request.session + ("modes" -> response.encode))
         }
-      }
-    )
+    }
   }
+
 }
 
