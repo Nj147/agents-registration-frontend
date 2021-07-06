@@ -19,6 +19,9 @@ package uk.gov.hmrc.agentsregfrontend.models
 import play.api.libs.json.{Json, OFormat}
 import play.api.data.Form
 import play.api.data.Forms.{email, list, mapping, nonEmptyText, number, text}
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
+
+import scala.util.matching.Regex
 
 case class Agent(arn: String)
 
@@ -68,12 +71,31 @@ object ContactNumber {
 case class Password(password: String, passwordCheck: String)
 
 object Password {
-  val passwordForm: Form[Password] =
+  val allNumbers: Regex = """\d*""".r
+  val allLetters: Regex = """[A-Za-z]*""".r
+
+  val passwordCheckConstraint: Constraint[String] = Constraint("constraints.passwordcheck")({ plainText =>
+    val errors = plainText match {
+      case allNumbers() => Seq(ValidationError("Password is all numbers"))
+      case allLetters() => Seq(ValidationError("Password is all letters"))
+      case _ => Nil
+    }
+    if (errors.isEmpty) {
+      Valid
+    } else {
+      Invalid(errors)
+    }
+  })
+
+
+  val passwordForm: Form[Password] = {
     Form(
       mapping(
-        "password" -> nonEmptyText,
-        "passwordCheck" -> nonEmptyText
+        "password" -> nonEmptyText(minLength = 8),
+        "passwordCheck" -> nonEmptyText(minLength = 8).verifying(passwordCheckConstraint)
       )(Password.apply)(Password.unapply))
+
+  }
 }
 
 case class Address(propertyNumber: String, postcode: String) {
@@ -109,3 +131,4 @@ object Correspondence {
     )(Correspondence.apply)(Correspondence.unapply))
 
 }
+

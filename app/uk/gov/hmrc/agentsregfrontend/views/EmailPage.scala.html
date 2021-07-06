@@ -12,7 +12,7 @@
 ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))
 }) { errorLinks => @govukErrorSummary(ErrorSummary(
 errorList = errorLinks,
-title = Text(messages("error.summary.title"))
+title = Text(messages("There is a problem"))
 ))
 }
 }
