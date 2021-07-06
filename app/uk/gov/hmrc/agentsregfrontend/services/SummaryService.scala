@@ -23,7 +23,7 @@ import scala.concurrent.Future
 
 class SummaryService @Inject()(connector: AgentConnector){
 
-  def agentDetails(agent: RegisteringUser): Future[Some[Agent]] ={
+  def agentDetails(agent: RegisteringUser): Future[Option[Agent]] ={
     connector.createAgent(agent)
   }
 

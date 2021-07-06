@@ -24,12 +24,11 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, session, status}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
 import play.api.test.{FakeRequest, Helpers}
+import uk.gov.hmrc.agentsregfrontend.models.Agent
 import uk.gov.hmrc.agentsregfrontend.services.SummaryService
-import uk.gov.hmrc.agentsregfrontend.views.html.Summary
-import uk.gov.hmrc.agentsregfrontend.views.html.ARNPage
-
+import uk.gov.hmrc.agentsregfrontend.views.html.{ARNFailurePage, ARNSuccessPage, SummaryPage}
 import scala.concurrent.Future
 
 class SummaryControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
@@ -43,9 +42,10 @@ class SummaryControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPe
       .build()
 
   val service: SummaryService = mock(classOf[SummaryService])
-  val summaryPage: Summary = app.injector.instanceOf[Summary]
-  val arnPage: ARNPage = app.injector.instanceOf[ARNPage]
-  val controller = new SummaryController(Helpers.stubMessagesControllerComponents(),service,summaryPage,arnPage)
+  val summaryPage: SummaryPage = app.injector.instanceOf[SummaryPage]
+  val arnSuccess: ARNSuccessPage = app.injector.instanceOf[ARNSuccessPage]
+  val arnFailure: ARNFailurePage = app.injector.instanceOf[ARNFailurePage]
+  val controller = new SummaryController(Helpers.stubMessagesControllerComponents(),service,summaryPage,arnSuccess,arnFailure)
 
   "GET /summary" should {
     "get all the session values and send them to the summary page" in  {
@@ -55,12 +55,19 @@ class SummaryControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPe
     }
   }
   "GET / arn" should {
-    "get all the session values and send them to the summary page" in  {
-      when(service.agentDetails(any())) thenReturn(Future.successful("ARN0000005"))
+    "Returns 200 with the ARN value"in  {
+      when(service.agentDetails(any())) thenReturn(Future.successful(Some(Agent("ARN0000005"))))
       val result = controller.getArn.apply(FakeRequest("GET", "/").withSession("password"  -> "testPassword", "businessName" -> "testBusinessName", "email" -> "testEmail", "contactNumber" -> "09876", "modes" -> "test,test", "address" -> "propertyNum/postcode"))
       status(result) shouldBe 200
       Jsoup.parse(contentAsString(result)).text() should include("ARN0000005")
     }
+    "Returns 400 with the ARN value"in  {
+      when(service.agentDetails(any())) thenReturn Future.successful(None)
+      val result = controller.getArn.apply(FakeRequest("GET", "/").withSession("password"  -> "testPassword", "businessName" -> "testBusinessName", "email" -> "testEmail", "contactNumber" -> "09876", "modes" -> "test,test", "address" -> "propertyNum/postcode"))
+      status(result) shouldBe 400
+      Jsoup.parse(contentAsString(result)).text() should include("Application failed")
+    }
+
   }
 
 

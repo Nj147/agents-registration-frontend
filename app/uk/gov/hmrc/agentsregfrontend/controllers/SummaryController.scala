@@ -47,7 +47,7 @@ class SummaryController @Inject()(mcc: MessagesControllerComponents, service: Su
     val user = RegisteringUser(password, businessName, email, contactNumber.toInt, correspondence, address.propertyNumber, address.postcode)
     service.agentDetails(user).map {
       case Some(x) => Ok(arnSuccess(x))
-      case  _ => BadRequest(arnFailure())
+      case None => BadRequest(arnFailure())
     }
   }
 

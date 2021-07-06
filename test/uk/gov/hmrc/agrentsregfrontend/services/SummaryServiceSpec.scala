@@ -48,7 +48,7 @@ class SummaryServiceSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSu
     "return the ARN value" in {
       when(connector.createAgent(any())) thenReturn(Future.successful(Some(Agent("ARN0000005"))))
       val result = service.agentDetails(user)
-      await(result) shouldBe ("ARN0000005")
+      await(result) shouldBe Some(Agent("ARN0000005"))
     }
   }
 
