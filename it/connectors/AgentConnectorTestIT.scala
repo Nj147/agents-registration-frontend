@@ -35,16 +35,16 @@ class AgentConnectorTestIT extends AnyWordSpec with Matchers with GuiceOneServer
 
   override def afterEach(): Unit = stopWireMock()
 
-  "POST /removeClient" should {
+  "POST /register" should {
     "return true when accepted response returned" in {
-      stubPost("/registerAgent",201, "")
+      stubPost("/registerAgent",201, "ARN150009")
       val result = connector.createAgent(obj)
-      await(result) shouldBe true
+      await(result).get.arn should be ("ARN150009")
     }
     "return false when bad request response «returned" in {
       stubPost("/registerAgent",500, "")
       val result = connector.createAgent(obj)
-      await(result) shouldBe false
+      await(result).get.arn shouldBe empty
     }
   }
 }

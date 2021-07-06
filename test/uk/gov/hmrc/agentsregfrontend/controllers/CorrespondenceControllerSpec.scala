@@ -68,10 +68,6 @@ class CorrespondenceControllerSpec extends AnyWordSpec with Matchers with GuiceO
       status(result) shouldBe SEE_OTHER
       session(result).get("modes") shouldBe Some("call")
     }
-    "return session variables" in {
-      val result = controller.processCorrespondence(isUpdate = false).apply(postfakeRequest.withFormUrlEncodedBody("modes[]" -> "call,text"))
-
-    }
     "return bad request when form is left empty" in {
       val result = controller.processCorrespondence(isUpdate = false).apply(postfakeRequest.withFormUrlEncodedBody())
       session(result).isEmpty
