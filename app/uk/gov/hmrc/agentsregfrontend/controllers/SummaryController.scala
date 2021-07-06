@@ -17,16 +17,14 @@
 package uk.gov.hmrc.agentsregfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsregfrontend.connectors.AgentConnector
 import uk.gov.hmrc.agentsregfrontend.models._
 import uk.gov.hmrc.agentsregfrontend.services.SummaryService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.agentsregfrontend.views.html.Summary
-import uk.gov.hmrc.agentsregfrontend.views.html.ARNPage
+import uk.gov.hmrc.agentsregfrontend.views.html.{ARNFailurePage, ARNSuccessPage, SummaryPage}
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class SummaryController @Inject()(mcc: MessagesControllerComponents, service: SummaryService, summarypage: Summary, arnPage: ARNPage) extends FrontendController(mcc) {
+class SummaryController @Inject()(mcc: MessagesControllerComponents, service: SummaryService, summarypage: SummaryPage, arnSuccess: ARNSuccessPage, arnFailure : ARNFailurePage) extends FrontendController(mcc) {
 
   def summary: Action[AnyContent] = Action{ implicit request =>
     val businessName = request.session.get("businessName").get
@@ -47,11 +45,10 @@ class SummaryController @Inject()(mcc: MessagesControllerComponents, service: Su
     val correspondence = Correspondence.decode(request.session.get("modes").get)
     val password = request.session.get("password").get
     val user = RegisteringUser(password, businessName, email, contactNumber.toInt, correspondence, address.propertyNumber, address.postcode)
-    service.agentDetails(user).map( x => {
-      println("Controller"+x)
-      Ok(arnPage(x))
+    service.agentDetails(user).map {
+      case Some(x) => Ok(arnSuccess(x))
+      case  _ => BadRequest(arnFailure())
     }
-    )
   }
 
 

@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @this(layout: Layout)
 
-@(arn: String)(implicit request: Request[_], messages: Messages)
+@(arn: Agent)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Successful Registration")) {
 <div class="govuk-panel govuk-panel--confirmation">
@@ -10,11 +10,10 @@
         Application complete
     </h1>
     <div id="arn" class="govuk-panel__body">
-        Your Agent Reference Number:<br><strong>@arn</strong>
+        Your Agent Reference Number:<br><strong>@arn.arn</strong>
     </div>
     <br>
 </div>
 <br>
 <a name="next-button" href="http://localhost:9005/agents-frontend/agent-login" class="govuk-button" data-module="govuk-button" type="submit">Sign in Here</a>
-
 }

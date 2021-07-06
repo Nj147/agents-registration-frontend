@@ -18,16 +18,13 @@ package uk.gov.hmrc.agentsregfrontend.services
 
 import uk.gov.hmrc.agentsregfrontend.connectors.AgentConnector
 import uk.gov.hmrc.agentsregfrontend.models.{Agent, RegisteringUser}
-import scala.concurrent.ExecutionContext.Implicits.global
 import javax.inject.Inject
 import scala.concurrent.Future
 
 class SummaryService @Inject()(connector: AgentConnector){
 
-  def agentDetails(agent: RegisteringUser): Future[String] ={
-    connector.createAgent(agent).map{
-      x => x.get.arn.replace("\"", "")
-    }
+  def agentDetails(agent: RegisteringUser): Future[Some[Agent]] ={
+    connector.createAgent(agent)
   }
 
 }
