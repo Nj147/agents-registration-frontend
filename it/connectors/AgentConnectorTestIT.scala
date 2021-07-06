@@ -20,10 +20,11 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import play.api.libs.json.Json
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.Helpers.baseApplicationBuilder.injector
 import uk.gov.hmrc.agentsregfrontend.connectors.AgentConnector
-import uk.gov.hmrc.agentsregfrontend.models.RegisteringUser
+import uk.gov.hmrc.agentsregfrontend.models.{Agent, RegisteringUser}
 
 class AgentConnectorTestIT extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach{
   lazy val connector: AgentConnector = injector.instanceOf[AgentConnector]
@@ -35,15 +36,15 @@ class AgentConnectorTestIT extends AnyWordSpec with Matchers with GuiceOneServer
   override def afterEach(): Unit = stopWireMock()
 
   "POST /register" should {
-    "return true when accepted response returned" in {
-      stubPost("/registerAgent",201, "ARN150009")
+    "return ARN when accepted response returned" in {
+      stubPost("/registerAgent",201, """{ "arn": "ARN150009"}""")
       val result = connector.createAgent(obj)
-      await(result).get.arn should be ("ARN150009")
+      await(result) shouldBe Some(Agent("ARN150009"))
     }
-    "return false when bad request response «returned" in {
+    "return None when bad request response «returned" in {
       stubPost("/registerAgent",500, "")
       val result = connector.createAgent(obj)
-      await(result).get.arn shouldBe empty
+      await(result) shouldBe None
     }
   }
 }

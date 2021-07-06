@@ -26,10 +26,13 @@ import scala.concurrent.Future
 
 class AgentConnector @Inject()(ws: WSClient) {
 
-  def createAgent(agent: RegisteringUser): Future[Some[Agent]] = {
+  def createAgent(agent: RegisteringUser): Future[Option[Agent]] = {
     ws.url(s"http://localhost:9009/registerAgent").post(Json.obj("password" -> agent.password, "businessName" -> agent.businessName, "email" -> agent.email, "mobileNumber" -> agent.mobileNumber, "moc" -> agent.moc, "propertyNumber" -> agent.propertyNumber, "postcode" -> agent.postcode))
-      .map(response => Some(Agent(
-        (response.json \ "arn").as[String]
-      )))
+      .map { response =>
+        response.status match {
+          case 201 => Some(Agent((response.json \ "arn").as[String]))
+          case 500 => None
+        }
+      }
   }
 }
