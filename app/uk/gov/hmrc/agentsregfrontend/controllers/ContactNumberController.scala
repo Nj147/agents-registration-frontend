@@ -18,14 +18,14 @@ package uk.gov.hmrc.agentsregfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsregfrontend.models.{Address, ContactNumber, Correspondence, RegisteringUser}
-import uk.gov.hmrc.agentsregfrontend.views.html.{ContactNumberPage, Summary}
+import uk.gov.hmrc.agentsregfrontend.views.html.{ContactNumberPage, SummaryPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
 
 class ContactNumberController @Inject()(mcc: MessagesControllerComponents,
                                         cnPage: ContactNumberPage,
-                                        summaryPage: Summary)
+                                        summaryPage: SummaryPage)
   extends FrontendController(mcc) {
 
   def displayContactPage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>

@@ -18,12 +18,12 @@ package uk.gov.hmrc.agentsregfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsregfrontend.models.{Address, Correspondence, RegisteringUser}
-import uk.gov.hmrc.agentsregfrontend.views.html.{AddressPage, Summary}
+import uk.gov.hmrc.agentsregfrontend.views.html.{AddressPage, SummaryPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
 
-class AddressController @Inject()(mcc: MessagesControllerComponents, addressPage: AddressPage, summaryPage: Summary)
+class AddressController @Inject()(mcc: MessagesControllerComponents, addressPage: AddressPage, summaryPage: SummaryPage)
   extends FrontendController(mcc) {
 
   def displayAddressPage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>

@@ -21,11 +21,11 @@ import uk.gov.hmrc.agentsregfrontend.models.{Address, Correspondence, Email, Reg
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
-import uk.gov.hmrc.agentsregfrontend.views.html.{EmailPage, Summary}
+import uk.gov.hmrc.agentsregfrontend.views.html.{EmailPage, SummaryPage}
 
 class EmailController @Inject()(  mcc: MessagesControllerComponents,
                                   emailPage: EmailPage,
-                                  summaryPage: Summary
+                                  summaryPage: SummaryPage
                                )
   extends FrontendController(mcc) {
 

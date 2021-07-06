@@ -19,12 +19,12 @@ package uk.gov.hmrc.agentsregfrontend.controllers
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsregfrontend.connectors.AgentConnector
 import uk.gov.hmrc.agentsregfrontend.models._
-import uk.gov.hmrc.agentsregfrontend.views.html.{BusinessNamePage, Summary}
+import uk.gov.hmrc.agentsregfrontend.views.html.{BusinessNamePage, SummaryPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
 
-class BusinessNameController @Inject()(mcc: MessagesControllerComponents, businessNamePage: BusinessNamePage, summaryPage: Summary)
+class BusinessNameController @Inject()(mcc: MessagesControllerComponents, businessNamePage: BusinessNamePage, summaryPage: SummaryPage)
   extends FrontendController(mcc) {
 
   def displayBusinessNamePage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
