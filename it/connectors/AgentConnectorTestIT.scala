@@ -20,7 +20,6 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
-import play.api.libs.json.Json
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.Helpers.baseApplicationBuilder.injector
 import uk.gov.hmrc.agentsregfrontend.connectors.AgentConnector

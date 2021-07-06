@@ -17,19 +17,19 @@
 package uk.gov.hmrc.agentsregfrontend.models
 
 import play.api.libs.json.{Json, OFormat}
-import play.api.data.{Form, Forms}
+import play.api.data.Form
 import play.api.data.Forms.{email, list, mapping, nonEmptyText, number, text}
 
 case class Agent(arn: String)
 
-object Agent{
+object Agent {
   implicit val format: OFormat[Agent] = Json.format[Agent]
 }
 
 
 case class RegisteringUser(password: String, businessName: String, email: String, mobileNumber: Int, moc: Seq[String], propertyNumber: String, postcode: String)
 
-object RegisteringUser{
+object RegisteringUser {
   implicit val format: OFormat[RegisteringUser] = Json.format[RegisteringUser]
 }
 
@@ -76,24 +76,24 @@ object Password {
       )(Password.apply)(Password.unapply))
 }
 
-  case class Address(propertyNumber: String, postcode: String) {
-    val encode = propertyNumber + "/" + postcode
-  }
+case class Address(propertyNumber: String, postcode: String) {
+  val encode: String = propertyNumber + "/" + postcode
+}
 
-  object Address {
-    val addressForm: Form[Address] =
-      Form(
-        mapping(
-          "propertyNumber" -> nonEmptyText,
-          "postcode" -> nonEmptyText
-        )(Address.apply)(Address.unapply))
+object Address {
+  val addressForm: Form[Address] =
+    Form(
+      mapping(
+        "propertyNumber" -> nonEmptyText,
+        "postcode" -> nonEmptyText
+      )(Address.apply)(Address.unapply))
 
-    def decode(string: String): Address = {
-      val (n, p): (String, String) = string.split("/").toList match {
-        case h :: t :: _ => h -> t
-      }
-      Address(n, p)
+  def decode(string: String): Address = {
+    val (n, p): (String, String) = string.split("/").toList match {
+      case h :: t :: _ => h -> t
     }
+    Address(n, p)
+  }
 }
 
 case class Correspondence(modes: List[String]) {

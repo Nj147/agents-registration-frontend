@@ -17,11 +17,9 @@
 package uk.gov.hmrc.agentsregfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsregfrontend.connectors.AgentConnector
 import uk.gov.hmrc.agentsregfrontend.models._
 import uk.gov.hmrc.agentsregfrontend.views.html.{BusinessNamePage, SummaryPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import javax.inject.Inject
 
 class BusinessNameController @Inject()(mcc: MessagesControllerComponents, businessNamePage: BusinessNamePage, summaryPage: SummaryPage)
@@ -30,7 +28,7 @@ class BusinessNameController @Inject()(mcc: MessagesControllerComponents, busine
   def displayBusinessNamePage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
       case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
-      case None =>  Ok(businessNamePage(BusinessName.form, isUpdate))
+      case None => Ok(businessNamePage(BusinessName.form, isUpdate))
     }
   }
 
@@ -38,16 +36,16 @@ class BusinessNameController @Inject()(mcc: MessagesControllerComponents, busine
     BusinessName.form.bindFromRequest().fold(
       formWithErrors => BadRequest(businessNamePage(formWithErrors, isUpdate)),
       response =>
-        if(isUpdate) {
-            val updatedRegUser = RegisteringUser(
-              request.session.get("password").getOrElse("NOT FOUND"),
-              response.businessName,
-              request.session.get("email").getOrElse("NOT FOUND"),
-              request.session.get("mobileNumber").getOrElse("000").toInt,
-              Correspondence.decode(request.session.get("modes").getOrElse("NOT FOUND")),
-              Address.decode(request.session.get("address").get).propertyNumber,
-              Address.decode(request.session.get("address").get).postcode
-            )
+        if (isUpdate) {
+          val updatedRegUser = RegisteringUser(
+            request.session.get("password").getOrElse("NOT FOUND"),
+            response.businessName,
+            request.session.get("email").getOrElse("NOT FOUND"),
+            request.session.get("mobileNumber").getOrElse("000").toInt,
+            Correspondence.decode(request.session.get("modes").getOrElse("NOT FOUND")),
+            Address.decode(request.session.get("address").get).propertyNumber,
+            Address.decode(request.session.get("address").get).postcode
+          )
           Ok(summaryPage(updatedRegUser))
         } else {
           Redirect(routes.EmailController.displayEmailPage(isUpdate = false)).withSession(request.session + ("businessName" -> response.businessName))

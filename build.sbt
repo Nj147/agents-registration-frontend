@@ -49,3 +49,5 @@ lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageFailOnMinimum := true,
   ScoverageKeys.coverageHighlighting := true
 )
+
+scalacOptions += s"-Wconf:src=${target.value}/.*:s"
