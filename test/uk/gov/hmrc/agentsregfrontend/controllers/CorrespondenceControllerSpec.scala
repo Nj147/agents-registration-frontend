@@ -78,5 +78,4 @@ class CorrespondenceControllerSpec extends AnyWordSpec with Matchers with GuiceO
       status(result) shouldBe Status.OK
     }
   }
-
 }

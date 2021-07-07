@@ -20,6 +20,7 @@ import play.api.libs.json.{Json, OFormat}
 import play.api.data.Form
 import play.api.data.Forms.{email, list, mapping, nonEmptyText, number, text}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
+import play.api.data.validation.Constraints.emailAddress
 
 import scala.util.matching.Regex
 
@@ -50,10 +51,13 @@ object BusinessName {
 case class Email(email: String)
 
 object Email {
+
+
+
   val emailForm: Form[Email] =
     Form(
       mapping(
-        "email" -> email
+        "email" -> email.verifying(emailAddress)
       )(Email.apply)(Email.unapply)
     )
 }
