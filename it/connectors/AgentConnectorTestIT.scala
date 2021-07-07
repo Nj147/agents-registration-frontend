@@ -25,7 +25,7 @@ import play.api.test.Helpers.baseApplicationBuilder.injector
 import uk.gov.hmrc.agentsregfrontend.connectors.AgentConnector
 import uk.gov.hmrc.agentsregfrontend.models.{Agent, RegisteringUser}
 
-class AgentConnectorTestIT extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach{
+class AgentConnectorTestIT extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach {
   lazy val connector: AgentConnector = injector.instanceOf[AgentConnector]
 
   val obj = RegisteringUser("password", "business", "email", 1234, List("call", "text message"), "addressline1", "postcode")
@@ -36,12 +36,12 @@ class AgentConnectorTestIT extends AnyWordSpec with Matchers with GuiceOneServer
 
   "POST /register" should {
     "return ARN when accepted response returned" in {
-      stubPost("/registerAgent",201, """{ "arn": "ARN150009"}""")
+      stubPost("/registerAgent", 201, """{ "arn": "ARN150009"}""")
       val result = connector.createAgent(obj)
       await(result) shouldBe Some(Agent("ARN150009"))
     }
     "return None when bad request response «returned" in {
-      stubPost("/registerAgent",500, "")
+      stubPost("/registerAgent", 500, "")
       val result = connector.createAgent(obj)
       await(result) shouldBe None
     }

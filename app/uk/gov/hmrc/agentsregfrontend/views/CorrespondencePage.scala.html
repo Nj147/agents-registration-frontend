@@ -5,59 +5,59 @@
 @(form: Form[Correspondence], isUpdate: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Correspondence")) {
-  <a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
+<a href="@request.headers.get(" referer")" class="govuk-back-link">Back</a>
 
 @if(form.errors.nonEmpty) {
-      @defining(form.errors.map { error =>
-      ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))
-      }) { errorLinks => @govukErrorSummary(ErrorSummary(
-      errorList = errorLinks,
-      title = Text(messages("There is a problem"))
-      ))
-      }
-      }
+@defining(form.errors.map { error =>
+ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))
+}) { errorLinks => @govukErrorSummary(ErrorSummary(
+errorList = errorLinks,
+title = Text(messages("There is a problem"))
+))
+}
+}
 
-      @helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.CorrespondenceController.processCorrespondence(isUpdate)) {
-        @govukCheckboxes(Checkboxes(
-            fieldset = Some(Fieldset(
-            legend = Some(Legend(
-            content = Text("Select modes of correspondence:"),
-            classes = "govuk-fieldset__legend--l",
-            isPageHeading = true
-            ))
-            )),
-            hint = Some(Hint(
-            content = Text("Select all that apply.")
-            )),
-            idPrefix = Some("correspondence"),
-            name = "modes[]",
-            items = Seq(
-                CheckboxItem(
-                content = Text("Phone call"),
-                value = "Phone call",
-                name = Some("modes[0]")
-                ),
-                CheckboxItem(
-                content = Text("Text message"),
-                value = "Text message",
-                name = Some("modes[1]")
-                ),
-                CheckboxItem(
-                content = Text("Email"),
-                value = "Email",
-                name = Some("modes[2]")
-                ),
-                CheckboxItem(
-                content = Text("Letter"),
-                value = "Letter",
-                name = Some("modes[3]")
-                )
-            )
-        ))
-        <br>
-        <button id="next-button" class="govuk-button" data-module="govuk-button">
-            Next
-        </button>
+@helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.CorrespondenceController.processCorrespondence(isUpdate)) {
+@govukCheckboxes(Checkboxes(
+fieldset = Some(Fieldset(
+legend = Some(Legend(
+content = Text("Select modes of correspondence:"),
+classes = "govuk-fieldset__legend--l",
+isPageHeading = true
+))
+)),
+hint = Some(Hint(
+content = Text("Select all that apply.")
+)),
+idPrefix = Some("correspondence"),
+name = "modes[]",
+items = Seq(
+CheckboxItem(
+content = Text("Phone call"),
+value = "Phone call",
+name = Some("modes[0]")
+),
+CheckboxItem(
+content = Text("Text message"),
+value = "Text message",
+name = Some("modes[1]")
+),
+CheckboxItem(
+content = Text("Email"),
+value = "Email",
+name = Some("modes[2]")
+),
+CheckboxItem(
+content = Text("Letter"),
+value = "Letter",
+name = Some("modes[3]")
+)
+)
+))
+<br>
+<button id="next-button" class="govuk-button" data-module="govuk-button">
+    Next
+</button>
 
-      }
+}
 }

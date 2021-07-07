@@ -49,7 +49,7 @@ class PasswordControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppP
     "return HTML" in {
       val result = controller.displayPasswordPage(getfakeRequest)
       contentType(result) shouldBe Some("text/html")
-      charset(result)     shouldBe Some("utf-8")
+      charset(result) shouldBe Some("utf-8")
     }
     "return a page with 2 input" in {
       val result = controller.displayPasswordPage(getfakeRequest)
