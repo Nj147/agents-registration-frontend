@@ -23,6 +23,7 @@ title = Text(messages("There is a problem"))
     @govukInput(Input(
     id = "email",
     name = "email",
+    value = Some(form.data("email")),
     classes = "govuk-input--width-10",
     errorMessage = Some(ErrorMessage(
     content = Text("Please enter a valid email address"))),
@@ -36,6 +37,7 @@ title = Text(messages("There is a problem"))
     @govukInput(Input(
     id = "email",
     name = "email",
+    value = Some(form.data("email")),
     classes = "govuk-input--width-10",
     label = Label(
     isPageHeading = true,

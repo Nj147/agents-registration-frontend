@@ -22,6 +22,7 @@
         @govukInput(Input(
         id = "businessName",
         name = "businessName",
+        value = Some(form.data("businessName")),
         classes = "govuk-input--width-10",
         errorMessage = Some(ErrorMessage(
         content = Text("Please enter a valid business Name"))),
@@ -35,6 +36,7 @@
         @govukInput(Input(
         id = "businessName",
         name = "businessName",
+        value = Some(form.data("businessName")),
         classes = "govuk-input--width-10",
         label = Label(
         isPageHeading = true,
