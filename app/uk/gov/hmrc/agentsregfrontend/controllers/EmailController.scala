@@ -39,7 +39,7 @@ class EmailController @Inject()(mcc: MessagesControllerComponents,
       formWithErrors => BadRequest(emailPage(formWithErrors, false)),
       response =>
         if (isUpdate) {
-          Redirect(routes.SummaryController.summary()).withSession("email" -> response.email)
+          Redirect(routes.SummaryController.summary()).withSession(request.session + ("email" -> response.email))
         } else {
           Redirect(routes.ContactNumberController.displayContactPage(isUpdate = false)).withSession(request.session + ("email" -> response.email))
         }

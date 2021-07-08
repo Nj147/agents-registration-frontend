@@ -37,7 +37,7 @@ class BusinessNameController @Inject()(mcc: MessagesControllerComponents, busine
       formWithErrors => BadRequest(businessNamePage(formWithErrors, isUpdate)),
       response =>
         if (isUpdate) {
-          Redirect(routes.SummaryController.summary()).withSession("businessName" -> response.businessName)
+          Redirect(routes.SummaryController.summary()).withSession(request.session + ("businessName" -> response.businessName))
         } else {
           Redirect(routes.EmailController.displayEmailPage(isUpdate = false)).withSession(request.session + ("businessName" -> response.businessName))
         }

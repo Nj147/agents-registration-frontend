@@ -42,7 +42,7 @@ class AddressController @Inject()(mcc: MessagesControllerComponents, addressPage
       formWithErrors => BadRequest(addressPage(formWithErrors, isUpdate)),
       response =>
         if(isUpdate) {
-          Redirect(routes.SummaryController.summary()).withSession("address" -> response.encode)
+          Redirect(routes.SummaryController.summary()).withSession(request.session + ("address" -> response.encode))
         } else {
           Redirect(routes.CorrespondenceController.displayCorrespondencePage(isUpdate = false)).withSession(request.session + ("address" -> response.encode))
         }

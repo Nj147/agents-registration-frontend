@@ -39,7 +39,7 @@ class ContactNumberController @Inject()(mcc: MessagesControllerComponents,
       formWithErrors => BadRequest(cnPage(formWithErrors, false)),
       response =>
         if(isUpdate) {
-          Redirect(routes.SummaryController.summary()).withSession("contactNumber" -> response.number)
+          Redirect(routes.SummaryController.summary()).withSession(request.session + ("contactNumber" -> response.number))
         } else {
           Redirect(routes.AddressController.displayAddressPage(isUpdate = false)).withSession(request.session + ("contactNumber" -> response.number))
         }

@@ -39,7 +39,7 @@ class CorrespondenceController @Inject()(mcc: MessagesControllerComponents, page
       case 0 => BadRequest(page(Correspondence.correspondenceForm.withError("modes", "Please select at least one method of correspondence"), isUpdate = false))
       case _ =>
         if (isUpdate) {
-          Redirect(routes.SummaryController.summary()).withSession("modes" -> response.encode)
+          Redirect(routes.SummaryController.summary()).withSession(request.session + ("modes" -> response.encode))
         } else {
           Redirect(routes.PasswordController.displayPasswordPage()).withSession(request.session + ("modes" -> response.encode))
         }
