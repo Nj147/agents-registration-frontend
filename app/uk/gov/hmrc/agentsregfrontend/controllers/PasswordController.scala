@@ -38,12 +38,11 @@ class PasswordController @Inject()(mcc: MessagesControllerComponents, passwordPa
       }, formData => {
         formData.password match {
           case formData.passwordCheck => Redirect(routes.SummaryController.summary()).withSession(request.session + ("password" -> formData.password))
-          case _ => BadRequest(passwordPage(Password.passwordForm.withError("password", "password does not match")))
+          case _ => BadRequest(passwordPage(Password.passwordForm.withError("passwordCheck", "Password does not match")))
         }
       }
     )
   }
-
 
 
 }

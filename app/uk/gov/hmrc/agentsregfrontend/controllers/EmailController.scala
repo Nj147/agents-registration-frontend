@@ -23,9 +23,9 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
 import uk.gov.hmrc.agentsregfrontend.views.html.{EmailPage, SummaryPage}
 
-class EmailController @Inject()(  mcc: MessagesControllerComponents,
-                                  emailPage: EmailPage,
-                                  summaryPage: SummaryPage
+class EmailController @Inject()(mcc: MessagesControllerComponents,
+                                emailPage: EmailPage,
+                                summaryPage: SummaryPage
                                )
   extends FrontendController(mcc) {
 
@@ -40,7 +40,7 @@ class EmailController @Inject()(  mcc: MessagesControllerComponents,
     Email.emailForm.bindFromRequest().fold(
       formWithErrors => BadRequest(emailPage(formWithErrors, false)),
       response =>
-        if(isUpdate) {
+        if (isUpdate) {
           val updatedRegUser = RegisteringUser(
             request.session.get("password").getOrElse("NOT FOUND"),
             request.session.get("businessName").getOrElse("NOT FOUND"),
