@@ -17,13 +17,13 @@
 package uk.gov.hmrc.agentsregfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsregfrontend.models.{Address, Correspondence, RegisteringUser}
-import uk.gov.hmrc.agentsregfrontend.views.html.{CorrespondencePage, SummaryPage}
+import uk.gov.hmrc.agentsregfrontend.models.Correspondence
+import uk.gov.hmrc.agentsregfrontend.views.html.CorrespondencePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
 
-class CorrespondenceController @Inject()(mcc: MessagesControllerComponents, page: CorrespondencePage, summaryPage: SummaryPage) extends FrontendController(mcc) {
+class CorrespondenceController @Inject()(mcc: MessagesControllerComponents, page: CorrespondencePage) extends FrontendController(mcc) {
 
   def displayCorrespondencePage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
@@ -31,6 +31,7 @@ class CorrespondenceController @Inject()(mcc: MessagesControllerComponents, page
       case None => Ok(page(Correspondence.correspondenceForm, isUpdate))
     }
   }
+
 
   def processCorrespondence(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
     val response = Correspondence.correspondenceForm.bindFromRequest.get

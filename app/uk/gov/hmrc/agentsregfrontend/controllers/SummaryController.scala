@@ -46,8 +46,8 @@ class SummaryController @Inject()(mcc: MessagesControllerComponents, service: Su
     val password = request.session.get("password").get
     val user = RegisteringUser(password, businessName, email, contactNumber.toLong, correspondence, address.propertyNumber, address.postcode)
     service.agentDetails(user).map {
-      case Some(x) => Ok(arnSuccess(x))
-      case None => BadRequest(arnFailure())
+      case Some(x)  => Ok(arnSuccess(x))
+      case None     => BadRequest(arnFailure())
     }
   }
 
