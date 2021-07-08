@@ -40,18 +40,9 @@ class ContactNumberController @Inject()(mcc: MessagesControllerComponents,
       formWithErrors => BadRequest(cnPage(formWithErrors, false)),
       response =>
         if(isUpdate) {
-          val updatedRegUser = RegisteringUser(
-            request.session.get("password").getOrElse("NOT FOUND"),
-            request.session.get("businessName").getOrElse("NOT FOUND"),
-            request.session.get("email").getOrElse("NOT FOUND"),
-            response.number,
-            Correspondence.decode(request.session.get("modes").getOrElse("NOT FOUND")),
-            Address.decode(request.session.get("address").get).propertyNumber,
-            Address.decode(request.session.get("address").get).postcode
-          )
-          Ok(summaryPage(updatedRegUser))
+          Redirect(routes.SummaryController.summary()).withSession("contactNumber" -> response.number)
         } else {
-          Redirect(routes.AddressController.displayAddressPage(isUpdate = false)).withSession(request.session + ("contactNumber" -> response.number.toString))
+          Redirect(routes.AddressController.displayAddressPage(isUpdate = false)).withSession(request.session + ("contactNumber" -> response.number))
         }
     )
   }

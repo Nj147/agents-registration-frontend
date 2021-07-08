@@ -25,7 +25,7 @@ import play.api.http.Status
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{charset, contentAsString, contentType, defaultAwaitTimeout, session, status}
+import play.api.test.Helpers.{charset, contentAsString, contentType, defaultAwaitTimeout, redirectLocation, session, status}
 
 class ContactNumberControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   override def fakeApplication(): Application =
@@ -65,14 +65,16 @@ class ContactNumberControllerSpec extends AnyWordSpec with Matchers with GuiceOn
       val result = controller.processContactNumber(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("number" -> ""))
       status(result) shouldBe BAD_REQUEST
     }
-    "redirect when given a valid form value, and add to the session data" in {
-      val result = controller.processContactNumber(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("number" -> "012345678"))
+    "redirect to the next form page when given a valid form value, and add to the session data" in {
+      val result = controller.processContactNumber(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("number" -> "01234567890"))
       status(result) shouldBe SEE_OTHER
-      session(result).get("contactNumber").get shouldBe "12345678"
+      session(result).get("contactNumber").get shouldBe "01234567890"
+      redirectLocation(result) shouldBe Some(s"${routes.AddressController.displayAddressPage(false)}")
     }
-    "send to Summary page with OK status if update" in {
-      val result = controller.processContactNumber(isUpdate = true).apply(fakeRequest.withFormUrlEncodedBody("number" -> "0828232232").withSession("address" -> "blah/DED2"))
-      status(result) shouldBe Status.OK
+    "redirected to Summary page status if update" in {
+      val result = controller.processContactNumber(isUpdate = true).apply(fakeRequest.withFormUrlEncodedBody("number" -> "01234567890").withSession("address" -> "blah/DED2"))
+      status(result) shouldBe Status.SEE_OTHER
+      redirectLocation(result) shouldBe Some(s"${routes.SummaryController.summary()}")
     }
   }
 
