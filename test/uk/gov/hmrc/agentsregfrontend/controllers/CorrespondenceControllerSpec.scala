@@ -25,7 +25,7 @@ import play.api.http.Status
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{FakeRequest, Helpers}
-import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, session, status}
+import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, redirectLocation, session, status}
 
 class CorrespondenceControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite{
 
@@ -63,19 +63,22 @@ class CorrespondenceControllerSpec extends AnyWordSpec with Matchers with GuiceO
   }
 
   "POST /correspondence" should {
-    "return 303 redirect with added session values" in {
+    "redirect to the next form page with added session values" in {
       val result = controller.processCorrespondence(isUpdate = false).apply(postfakeRequest.withFormUrlEncodedBody("modes[]" -> "call"))
       status(result) shouldBe SEE_OTHER
       session(result).get("modes") shouldBe Some("call")
+      redirectLocation(result) shouldBe Some(s"${routes.PasswordController.displayPasswordPage()}")
     }
     "return bad request when form is left empty" in {
       val result = controller.processCorrespondence(isUpdate = false).apply(postfakeRequest.withFormUrlEncodedBody())
       session(result).isEmpty
       status(result) shouldBe BAD_REQUEST
     }
-    "send to Summary page with OK status if update" in {
-      val result = controller.processCorrespondence(isUpdate = true).apply(postfakeRequest.withFormUrlEncodedBody("modes[]" -> "call,text").withSession("address" -> "blah/DED2"))
-      status(result) shouldBe Status.OK
+    "redirect to the summary page with updated session values when updating" in {
+      val result = controller.processCorrespondence(isUpdate = true).apply(postfakeRequest.withFormUrlEncodedBody("modes[]" -> "call,text"))
+      status(result) shouldBe Status.SEE_OTHER
+      session(result).get("modes") shouldBe Some("call,text")
+      redirectLocation(result) shouldBe Some(s"${routes.SummaryController.summary()}")
     }
   }
 }

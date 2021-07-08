@@ -24,7 +24,7 @@ import play.api.Application
 import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{charset, contentAsString, contentType, defaultAwaitTimeout, session, status}
+import play.api.test.Helpers.{charset, contentAsString, contentType, defaultAwaitTimeout, redirectLocation, session, status}
 import uk.gov.hmrc.agentsregfrontend.models.Address
 
 class AddressControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
@@ -65,14 +65,17 @@ class AddressControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPe
       val result = controller.processAddress(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("propertyNumber" -> "1 New Street", "postcode" -> ""))
       status(result) shouldBe 400
     }
-    "redirect if valid value input with new sessions data" in {
+    "redirect to the next form page with new sessions data if valid value input" in {
       val result = controller.processAddress(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("propertyNumber" -> testAddress.propertyNumber, "postcode" -> testAddress.postcode))
       status(result) shouldBe 303
       Address.decode(session(result).get("address").get) shouldBe testAddress
+      redirectLocation(result) shouldBe Some(s"${routes.CorrespondenceController.displayCorrespondencePage(false)}")
     }
-    "send to Summary page with OK status if update" in {
-      val result = controller.processAddress(isUpdate = true).apply(fakeRequest.withFormUrlEncodedBody("propertyNumber" -> testAddress.propertyNumber, "postcode" -> testAddress.postcode))
-      status(result) shouldBe Status.OK
+    "redirect to the Summary page with new session values, if update" in {
+      val result = controller.processAddress(isUpdate = true).apply(fakeRequest.withFormUrlEncodedBody("propertyNumber" -> "1 Street", "postcode" -> "A11 1AB"))
+      status(result) shouldBe Status.SEE_OTHER
+      Address.decode(session(result).get("address").get) shouldBe Address("1 Street", "A11 1AB")
+      redirectLocation(result) shouldBe Some(s"${routes.SummaryController.summary()}")
     }
   }
 
