@@ -25,7 +25,7 @@ import play.api.http.Status
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{charset, contentAsString, contentType, defaultAwaitTimeout, session, status}
+import play.api.test.Helpers.{charset, contentAsString, contentType, defaultAwaitTimeout, redirectLocation, session, status}
 import uk.gov.hmrc.agentsregfrontend.models.Address
 
 class BusinessNameControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
@@ -66,19 +66,22 @@ class BusinessNameControllerSpec extends AnyWordSpec with Matchers with GuiceOne
     }
 
     "POST /businessName" should {
-      "return 303 redirect with added session values" in {
+      "redirect to the next form page with added session values if valid values added" in {
         val result = controller.processBusinessName(isUpdate = false).apply(postfakeRequest.withFormUrlEncodedBody("businessName" -> "testBusinessName"))
         status(result) shouldBe SEE_OTHER
         session(result).get("businessName") shouldBe Some("testBusinessName")
+        redirectLocation(result) shouldBe Some(s"${routes.EmailController.displayEmailPage(false)}")
       }
       "return bad request with nothing in session when form is left empty" in {
         val result = controller.processBusinessName(isUpdate = false).apply(postfakeRequest.withFormUrlEncodedBody("businessName" -> ""))
         session(result).isEmpty
         status(result) shouldBe BAD_REQUEST
       }
-      "send to Summary page with OK status if update" in {
-        val result = controller.processBusinessName(isUpdate = true).apply(postfakeRequest.withFormUrlEncodedBody("businessName" -> "testBusinessName").withSession("address" -> "blah/DED2"))
-        status(result) shouldBe Status.OK
+      "redirect to the summary page with added session values if updating and valid values added" in {
+        val result = controller.processBusinessName(isUpdate = true).apply(postfakeRequest.withFormUrlEncodedBody("businessName" -> "testBusinessName"))
+        status(result) shouldBe Status.SEE_OTHER
+        session(result).get("businessName") shouldBe Some("testBusinessName")
+        redirectLocation(result) shouldBe Some(s"${routes.SummaryController.summary()}")
       }
     }
   }

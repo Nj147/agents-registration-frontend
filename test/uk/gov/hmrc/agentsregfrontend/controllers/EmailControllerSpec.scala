@@ -25,7 +25,7 @@ import play.api.http.Status
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{charset, contentAsString, contentType, defaultAwaitTimeout, session, status}
+import play.api.test.Helpers.{charset, contentAsString, contentType, defaultAwaitTimeout, redirectLocation, session, status}
 
 class EmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   override def fakeApplication(): Application =
@@ -65,14 +65,17 @@ class EmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerS
       val result = controller.processEmail(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("email" -> ""))
       status(result) shouldBe BAD_REQUEST
     }
-    "redirect if valid value input with session data" in {
+    "redirect to the next form page with added if valid value input with session data" in {
       val result = controller.processEmail(isUpdate = false).apply(fakeRequest.withFormUrlEncodedBody("email" -> "test@test.com"))
       status(result) shouldBe SEE_OTHER
       session(result).get("email").get shouldBe "test@test.com"
+      redirectLocation(result) shouldBe Some(s"${routes.ContactNumberController.displayContactPage(false)}")
     }
-    "send to Summary page with OK status if update" in {
-      val result = controller.processEmail(isUpdate = true).apply(fakeRequest.withFormUrlEncodedBody("email" -> "test@test.com").withSession("address" -> "blah/DED2"))
-      status(result) shouldBe Status.OK
+    "redirect to the Summary page with updated session values when updating" in {
+      val result = controller.processEmail(isUpdate = true).apply(fakeRequest.withFormUrlEncodedBody("email" -> "test1@test2.com").withSession("address" -> "blah/DED2"))
+      status(result) shouldBe Status.SEE_OTHER
+      session(result).get("email").get shouldBe "test1@test2.com"
+      redirectLocation(result) shouldBe Some(s"${routes.SummaryController.summary()}")
     }
   }
 

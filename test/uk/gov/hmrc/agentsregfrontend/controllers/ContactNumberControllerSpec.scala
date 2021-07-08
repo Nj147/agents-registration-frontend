@@ -74,6 +74,7 @@ class ContactNumberControllerSpec extends AnyWordSpec with Matchers with GuiceOn
     "redirected to Summary page status if update" in {
       val result = controller.processContactNumber(isUpdate = true).apply(fakeRequest.withFormUrlEncodedBody("number" -> "01234567890").withSession("address" -> "blah/DED2"))
       status(result) shouldBe Status.SEE_OTHER
+      session(result).get("contactNumber").get shouldBe "01234567890"
       redirectLocation(result) shouldBe Some(s"${routes.SummaryController.summary()}")
     }
   }

@@ -37,16 +37,7 @@ class BusinessNameController @Inject()(mcc: MessagesControllerComponents, busine
       formWithErrors => BadRequest(businessNamePage(formWithErrors, isUpdate)),
       response =>
         if (isUpdate) {
-          val updatedRegUser = RegisteringUser(
-            request.session.get("password").getOrElse("NOT FOUND"),
-            response.businessName,
-            request.session.get("email").getOrElse("NOT FOUND"),
-            request.session.get("mobileNumber").getOrElse("000").toInt,
-            Correspondence.decode(request.session.get("modes").getOrElse("NOT FOUND")),
-            Address.decode(request.session.get("address").get).propertyNumber,
-            Address.decode(request.session.get("address").get).postcode
-          )
-          Ok(summaryPage(updatedRegUser))
+          Redirect(routes.SummaryController.summary()).withSession("businessName" -> response.businessName)
         } else {
           Redirect(routes.EmailController.displayEmailPage(isUpdate = false)).withSession(request.session + ("businessName" -> response.businessName))
         }

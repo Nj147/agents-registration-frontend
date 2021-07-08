@@ -38,16 +38,7 @@ class AddressController @Inject()(mcc: MessagesControllerComponents, addressPage
       formWithErrors => BadRequest(addressPage(formWithErrors, isUpdate)),
       response =>
         if(isUpdate) {
-          val updatedRegUser = RegisteringUser(
-            request.session.get("password").getOrElse("NOT FOUND"),
-            request.session.get("businessName").getOrElse("NOT FOUND"),
-            request.session.get("email").getOrElse("NOT FOUND"),
-            request.session.get("mobileNumber").getOrElse("000").toInt,
-            Correspondence.decode(request.session.get("modes").getOrElse("NOT FOUND")),
-            response.propertyNumber,
-            response.postcode
-          )
-          Ok(summaryPage(updatedRegUser))
+          Redirect(routes.SummaryController.summary()).withSession("address" -> response.encode)
         } else {
           Redirect(routes.CorrespondenceController.displayCorrespondencePage(isUpdate = false)).withSession(request.session + ("address" -> response.encode))
         }
