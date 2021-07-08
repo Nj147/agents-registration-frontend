@@ -52,12 +52,10 @@ case class Email(email: String)
 
 object Email {
 
-
-
   val emailForm: Form[Email] =
     Form(
       mapping(
-        "email" -> email.verifying(emailAddress)
+        "email" -> email
       )(Email.apply)(Email.unapply)
     )
 }
@@ -75,14 +73,12 @@ object ContactNumber {
 case class Password(password: String, passwordCheck: String)
 
 object Password {
-  val allNumbers: Regex = """\d*""".r
-  val allLetters: Regex = """[A-Za-z]*""".r
+  val regex: Regex = """^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$""".r
 
   val passwordCheckConstraint: Constraint[String] = Constraint("constraints.passwordcheck")({ plainText =>
     val errors = plainText match {
-      case allNumbers() => Seq(ValidationError("Password is all numbers"))
-      case allLetters() => Seq(ValidationError("Password is all letters"))
-      case _ => Nil
+      case regex() => Nil
+      case _ => Seq(ValidationError("Password is invalid"))
     }
     if (errors.isEmpty) {
       Valid
@@ -95,8 +91,8 @@ object Password {
   val passwordForm: Form[Password] = {
     Form(
       mapping(
-        "password" -> nonEmptyText(minLength = 8),
-        "passwordCheck" -> nonEmptyText(minLength = 8).verifying(passwordCheckConstraint)
+        "password" -> text.verifying(passwordCheckConstraint),
+        "passwordCheck" -> text
       )(Password.apply)(Password.unapply))
 
   }

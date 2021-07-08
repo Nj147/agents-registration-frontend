@@ -5,7 +5,7 @@
 @(user: RegisteringUser)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Summary")) {
-<a href="/example-frontend/date" class="govuk-back-link">Back</a>
+<a href="@uk.gov.hmrc.agentsregfrontend.controllers.routes.PasswordController.displayPasswordPage()" class="govuk-back-link">Back</a>
 <h1 class="govuk-heading-xl">Summary</h1>
 @govukSummaryList(SummaryList(
 rows = Seq(
