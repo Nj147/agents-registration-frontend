@@ -107,11 +107,26 @@ case class Address(propertyNumber: String, postcode: String) {
 }
 
 object Address {
+
+  val regex: Regex = """(?:[A-Za-z]\d ?\d[A-Za-z]{2})|(?:[A-Za-z][A-Za-z\d]\d ?\d[A-Za-z]{2})|(?:[A-Za-z]{2}\d{2} ?\d[A-Za-z]{2})|(?:[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]{2})|(?:[A-Za-z]{2}\d[A-Za-z] ?\d[A-Za-z]{2})""".stripMargin.r
+
+  val postcodeCheckConstraint: Constraint[String] = Constraint("constraints.postcodecheck")({ plainText =>
+    val errors = plainText match {
+      case regex() => Nil
+      case _ => Seq(ValidationError("Input is not a valid postcode"))
+    }
+    if (errors.isEmpty) {
+      Valid
+    } else {
+      Invalid(errors)
+    }
+  })
+
   val addressForm: Form[Address] =
     Form(
       mapping(
         "propertyNumber" -> nonEmptyText,
-        "postcode" -> nonEmptyText
+        "postcode" -> nonEmptyText.verifying(postcodeCheckConstraint)
       )(Address.apply)(Address.unapply))
 
   def decode(string: String): Address = {
