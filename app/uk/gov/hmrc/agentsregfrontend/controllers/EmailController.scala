@@ -30,7 +30,10 @@ class EmailController @Inject()(mcc: MessagesControllerComponents,
   def displayEmailPage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
       case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
-      case None => Ok(emailPage(Email.emailForm.fill(Email(email = "")), isUpdate))
+      case None => request.session.get("email").fold(
+        Ok(emailPage(Email.emailForm.fill(Email(email = "")), isUpdate))
+      )
+      { x => Ok(emailPage(Email.emailForm.fill(Email(email = x)), isUpdate)) }
     }
   }
 

@@ -63,7 +63,11 @@ class PasswordControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppP
 
   "POST /password" should {
     "return 400 with nothing in session when passwords dont match " in {
-      val result = controller.processPassword(postfakeRequest.withFormUrlEncodedBody("password" -> "testPassword", "passwordCheck" -> "testPasswordCheck"))
+      val result = controller.processPassword(postfakeRequest.withFormUrlEncodedBody("password" -> "testPassword123?", "passwordCheck" -> "testPasswordCheck"))
+      status(result) shouldBe BAD_REQUEST
+    }
+    "return 400 when the password doesn't meet the 1 number, 1 capital letter, 1 lowercase letter and 1 special character" in {
+      val result = controller.processPassword(postfakeRequest.withFormUrlEncodedBody("password" -> "testPassword123?", "passwordCheck" -> "testPasswordCheck"))
       status(result) shouldBe BAD_REQUEST
     }
     "redirect with session data added when passwords do match" in {

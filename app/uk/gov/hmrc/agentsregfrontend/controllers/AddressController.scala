@@ -29,13 +29,14 @@ class AddressController @Inject()(mcc: MessagesControllerComponents, addressPage
   def displayAddressPage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
       case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
-      case None => { val filledForm = request.session.get("address").fold(
-        Address.addressForm.fill(Address(propertyNumber="", postcode="")))
-        {x => Address.addressForm.fill(Address.decode(x))}
-        Ok(addressPage(filledForm, isUpdate))
-      }
+      case None =>
+        request.session.get("address").fold(
+          Ok(addressPage(Address.addressForm.fill(Address(propertyNumber = "", postcode = "")), isUpdate))
+        )
+        { address => Ok(addressPage(Address.addressForm.fill(Address.decode(address)), isUpdate)) }
     }
   }
+
 
   def processAddress(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
     Address.addressForm.bindFromRequest().fold(
