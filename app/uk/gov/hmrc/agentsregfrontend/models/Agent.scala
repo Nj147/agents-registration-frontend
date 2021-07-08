@@ -18,9 +18,8 @@ package uk.gov.hmrc.agentsregfrontend.models
 
 import play.api.libs.json.{Json, OFormat}
 import play.api.data.Form
-import play.api.data.Forms.{email, list, mapping, nonEmptyText, number, text}
+import play.api.data.Forms.{email, list, mapping, nonEmptyText, text}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
-import play.api.data.validation.Constraints.emailAddress
 
 import scala.util.matching.Regex
 
@@ -142,6 +141,7 @@ object Address {
   def decode(string: String): Address = {
     val (n, p): (String, String) = string.split("/").toList match {
       case h :: t :: _ => h -> t
+      case _ => ("", "")
     }
     Address(n, p)
   }
