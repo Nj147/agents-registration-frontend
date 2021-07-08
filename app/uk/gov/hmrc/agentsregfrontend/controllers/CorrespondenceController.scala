@@ -28,9 +28,15 @@ class CorrespondenceController @Inject()(mcc: MessagesControllerComponents, page
   def displayCorrespondencePage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
       case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
-      case None => Ok(page(Correspondence.correspondenceForm, isUpdate))
+      case None =>
+        val filledForm = request.session.get("correspondence").fold(
+          Correspondence.correspondenceForm.fill(Correspondence(modes= List("modes[0]")))
+        )
+        {x => Correspondence.correspondenceForm.fill(Correspondence(Correspondence.decode(x)))}
+        Ok(page(filledForm, isUpdate))
+      }
     }
-  }
+
 
   def processCorrespondence(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
     val response = Correspondence.correspondenceForm.bindFromRequest.get

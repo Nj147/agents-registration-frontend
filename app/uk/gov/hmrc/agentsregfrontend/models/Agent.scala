@@ -152,7 +152,7 @@ case class Correspondence(modes: List[String]) {
 }
 
 object Correspondence {
-  def decode(string: String): Seq[String] = string.split(",").toList
+  def decode(string: String): List[String] = string.split(",").toList
 
   val correspondenceForm: Form[Correspondence] = Form(
     mapping(
