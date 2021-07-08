@@ -23,6 +23,7 @@
                 @govukInput(Input(
                     id = "number",
                     name = "number",
+                    value = Some(form.data("number")),
                     classes = "govuk-input--width-10",
                     errorMessage = Some(ErrorMessage(
                         content = Text("Please enter a valid phone number"))),
@@ -36,6 +37,7 @@
                 @govukInput(Input(
                     id = "number",
                     name = "number",
+                    value = Some(form.data("number")),
                     classes = "govuk-input--width-10",
                     label = Label(
                         isPageHeading = true,

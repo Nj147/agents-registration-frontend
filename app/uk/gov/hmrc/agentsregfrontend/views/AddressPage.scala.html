@@ -22,6 +22,7 @@
             @if(form.errors("propertyNumber").nonEmpty) {
                 @govukInput(Input(
                     id = "propertyNumber",
+                    value= Some(form.data("propertyNumber")),
                     name = "propertyNumber",
                     classes = "govuk-input--width-10",
                     errorMessage = Some(ErrorMessage(
@@ -36,6 +37,7 @@
                 @govukInput(Input(
                     id = "propertyNumber",
                     name = "propertyNumber",
+                    value= Some(form.data("propertyNumber")),
                     classes = "govuk-input--width-10",
                     label = Label(
                         isPageHeading = true,
@@ -49,6 +51,7 @@
                 @govukInput(Input(
                     id = "postcode",
                     name = "postcode",
+                    value = Some(form.data("postcode")),
                     classes = "govuk-input--width-10",
                     errorMessage = Some(ErrorMessage(
                         content = Text("Invalid postcode"))),
@@ -62,6 +65,7 @@
                 @govukInput(Input(
                     id = "postcode",
                     name = "postcode",
+                    value = Some(form.data("postcode")),
                     classes = "govuk-input--width-10",
                     label = Label(
                         isPageHeading = true,
