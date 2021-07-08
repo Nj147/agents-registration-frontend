@@ -30,7 +30,7 @@ object Agent {
 }
 
 
-case class RegisteringUser(password: String, businessName: String, email: String, mobileNumber: Int, moc: Seq[String], propertyNumber: String, postcode: String)
+case class RegisteringUser(password: String, businessName: String, email: String, mobileNumber: Long, moc: Seq[String], propertyNumber: String, postcode: String)
 
 object RegisteringUser {
   implicit val format: OFormat[RegisteringUser] = Json.format[RegisteringUser]
@@ -58,13 +58,27 @@ object Email {
     )
 }
 
-case class ContactNumber(number: Int)
+case class ContactNumber(number: String)
 
 object ContactNumber {
+  val validNumber: Regex = """\d{11}""".r
+
+  val valid: Constraint[String] = Constraint("constraints.number")({ plainText =>
+    val errors = plainText match {
+      case validNumber() => Nil
+      case _ => Seq(ValidationError("Please Enter an 11 digit, UK Phone Number e.g 071234 56789 "))
+    }
+    if (errors.isEmpty) {
+      Valid
+    } else {
+      Invalid(errors)
+    }
+  })
+
   val contactForm: Form[ContactNumber] =
     Form(
       mapping(
-        "number" -> number
+        "number" -> nonEmptyText.verifying(valid)
       )(ContactNumber.apply)(ContactNumber.unapply))
 }
 

@@ -33,7 +33,7 @@ class SummaryController @Inject()(mcc: MessagesControllerComponents, service: Su
     val address = Address.decode(request.session.get("address").get)
     val correspondence = Correspondence.decode(request.session.get("modes").get)
     val password = request.session.get("password").get
-    val user = RegisteringUser(password, businessName, email, contactNumber.toInt, correspondence, address.propertyNumber, address.postcode)
+    val user = RegisteringUser(password, businessName, email, contactNumber.toLong, correspondence, address.propertyNumber, address.postcode)
     Ok(summarypage(user))
   }
 
@@ -44,7 +44,7 @@ class SummaryController @Inject()(mcc: MessagesControllerComponents, service: Su
     val address = Address.decode(request.session.get("address").get)
     val correspondence = Correspondence.decode(request.session.get("modes").get)
     val password = request.session.get("password").get
-    val user = RegisteringUser(password, businessName, email, contactNumber.toInt, correspondence, address.propertyNumber, address.postcode)
+    val user = RegisteringUser(password, businessName, email, contactNumber.toLong, correspondence, address.propertyNumber, address.postcode)
     service.agentDetails(user).map {
       case Some(x) => Ok(arnSuccess(x))
       case None => BadRequest(arnFailure())
