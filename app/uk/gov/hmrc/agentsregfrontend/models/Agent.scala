@@ -67,7 +67,7 @@ object ContactNumber {
   val valid: Constraint[String] = Constraint("constraints.number")({ plainText =>
     val errors = plainText match {
       case validNumber() => Nil
-      case _ => Seq(ValidationError("Please Enter an 11 digit, UK Phone Number e.g 071234 56789 "))
+      case _ => Seq(ValidationError("Please Enter an 11 digit, UK Phone Number e.g 07123456789"))
     }
     if (errors.isEmpty) {
       Valid
@@ -79,7 +79,7 @@ object ContactNumber {
   val contactForm: Form[ContactNumber] =
     Form(
       mapping(
-        "number" -> nonEmptyText.verifying(valid)
+        "number" -> text.verifying(valid)
       )(ContactNumber.apply)(ContactNumber.unapply))
 }
 
@@ -135,7 +135,7 @@ object Address {
     Form(
       mapping(
         "propertyNumber" -> nonEmptyText,
-        "postcode" -> nonEmptyText.verifying(postcodeCheckConstraint)
+        "postcode" -> text.verifying(postcodeCheckConstraint)
       )(Address.apply)(Address.unapply))
 
   def decode(string: String): Address = {

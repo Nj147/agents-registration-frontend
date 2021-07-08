@@ -5,79 +5,79 @@
 @(form: Form[Address], isUpdate: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Business Address")) {
-    <a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
-    <h1 class="govuk-heading-xl">Enter Addres</h1>
-    @if(form.errors.nonEmpty) {
-        @defining(form.errors.map { error =>
-            ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))
-        }) { errorLinks => @govukErrorSummary(ErrorSummary(
-            errorList = errorLinks,
-            title = Text(messages("There is a problem"))
-        ))
-        }
-    }
-    @helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.AddressController.processAddress(isUpdate)) {
+<a href="@request.headers.get(" referer")" class="govuk-back-link">Back</a>
+<h1 class="govuk-heading-xl">Enter Address</h1>
+@if(form.errors.nonEmpty) {
+@defining(form.errors.map { error =>
+ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))
+}) { errorLinks => @govukErrorSummary(ErrorSummary(
+errorList = errorLinks,
+title = Text(messages("There is a problem"))
+))
+}
+}
+@helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.AddressController.processAddress(isUpdate)) {
 
-        <div class="govuk-form-group">
-            @if(form.errors("propertyNumber").nonEmpty) {
-                @govukInput(Input(
-                    id = "propertyNumber",
-                    value= Some(form.data("propertyNumber")),
-                    name = "propertyNumber",
-                    classes = "govuk-input--width-10",
-                    errorMessage = Some(ErrorMessage(
-                        content = Text("Invalid address"))),
-                    label = Label(
-                        isPageHeading = true,
-                        classes = "govuk-label--m",
-                        content = Text("Please enter the first line of your business address")
-                    )
-                ))
-            } else {
-                @govukInput(Input(
-                    id = "propertyNumber",
-                    name = "propertyNumber",
-                    value= Some(form.data("propertyNumber")),
-                    classes = "govuk-input--width-10",
-                    label = Label(
-                        isPageHeading = true,
-                        classes = "govuk-label--m",
-                        content = Text("Please enter the first line of your business address")
-                    )
-                ))
-            }
-
-            @if(form.errors("postcode").nonEmpty) {
-                @govukInput(Input(
-                    id = "postcode",
-                    name = "postcode",
-                    value = Some(form.data("postcode")),
-                    classes = "govuk-input--width-10",
-                    errorMessage = Some(ErrorMessage(
-                        content = Text("Invalid postcode"))),
-                    label = Label(
-                        isPageHeading = true,
-                        classes = "govuk-label--m",
-                        content = Text("Please enter your business postcode")
-                    )
-                ))
-            } else {
-                @govukInput(Input(
-                    id = "postcode",
-                    name = "postcode",
-                    value = Some(form.data("postcode")),
-                    classes = "govuk-input--width-10",
-                    label = Label(
-                        isPageHeading = true,
-                        classes = "govuk-label--m",
-                        content = Text("Please enter your business postcode")
-                    )
-                ))
-            }
-            <br>
-            <button id="next-button" class="govuk-button" data-module="govuk-button">
-                Next
-            </button>
-        </div>
+<div class="govuk-form-group">
+    @if(form.errors("propertyNumber").nonEmpty) {
+    @govukInput(Input(
+    id = "propertyNumber",
+    value= Some(form.data("propertyNumber")),
+    name = "propertyNumber",
+    classes = "govuk-input--width-10",
+    errorMessage = Some(ErrorMessage(
+    content = Text("Invalid address"))),
+    label = Label(
+    isPageHeading = true,
+    classes = "govuk-label--m",
+    content = Text("Please enter the first line of your business address")
+    )
+    ))
+    } else {
+    @govukInput(Input(
+    id = "propertyNumber",
+    name = "propertyNumber",
+    value= Some(form.data("propertyNumber")),
+    classes = "govuk-input--width-10",
+    label = Label(
+    isPageHeading = true,
+    classes = "govuk-label--m",
+    content = Text("Please enter the first line of your business address")
+    )
+    ))
     }
+
+    @if(form.errors("postcode").nonEmpty) {
+    @govukInput(Input(
+    id = "postcode",
+    name = "postcode",
+    value = Some(form.data("postcode")),
+    classes = "govuk-input--width-10",
+    errorMessage = Some(ErrorMessage(
+    content = Text("Invalid postcode"))),
+    label = Label(
+    isPageHeading = true,
+    classes = "govuk-label--m",
+    content = Text("Please enter your business postcode")
+    )
+    ))
+    } else {
+    @govukInput(Input(
+    id = "postcode",
+    name = "postcode",
+    value = Some(form.data("postcode")),
+    classes = "govuk-input--width-10",
+    label = Label(
+    isPageHeading = true,
+    classes = "govuk-label--m",
+    content = Text("Please enter your business postcode")
+    )
+    ))
+    }
+    <br>
+    <button id="next-button" class="govuk-button" data-module="govuk-button">
+        Next
+    </button>
+</div>
+}
 }
