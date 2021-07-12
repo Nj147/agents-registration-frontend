@@ -54,6 +54,10 @@ class EmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerS
       val result = controller.displayEmailPage(isUpdate = false).apply(fakeRequest)
       Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
     }
+    "have a pre-populated input field if already entered once" in {
+      val result = controller.displayEmailPage(isUpdate = false).apply(fakeRequest.withSession("email" -> "test@test.com"))
+      Jsoup.parse(contentAsString(result)).getElementById("email").`val`() shouldBe "test@test.com"
+    }
     "redirect if the user is logged in" in {
       val result = controller.displayEmailPage(isUpdate = false).apply(fakeRequest.withSession("arn" -> "ARN0000001"))
       status(result) shouldBe SEE_OTHER

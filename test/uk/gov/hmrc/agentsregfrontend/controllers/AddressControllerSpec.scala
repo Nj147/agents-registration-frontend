@@ -54,6 +54,11 @@ class AddressControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPe
       val result = controller.displayAddressPage(isUpdate = false).apply(fakeRequest)
       Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 2
     }
+    "have a pre-populated input fields if already entered once" in {
+      val result = controller.displayAddressPage(isUpdate = false).apply(fakeRequest.withSession("address" -> "1 New Street/AA11 1AB"))
+      Jsoup.parse(contentAsString(result)).getElementById("propertyNumber").`val`() shouldBe "1 New Street"
+      Jsoup.parse(contentAsString(result)).getElementById("postcode").`val`() shouldBe "AA11 1AB"
+    }
     "redirect if the user is logged in" in {
       val result = controller.displayAddressPage(isUpdate = false).apply(fakeRequest.withSession("arn" -> "ARN0000001"))
       status(result) shouldBe Status.SEE_OTHER

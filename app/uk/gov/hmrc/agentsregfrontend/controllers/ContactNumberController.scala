@@ -30,7 +30,11 @@ class ContactNumberController @Inject()(mcc: MessagesControllerComponents,
   def displayContactPage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
       case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
-      case None => Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber(number= "")), isUpdate))
+      case None =>
+        request.session.get("contactNumber").fold(
+          Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber(number= "")), isUpdate))
+        )
+        {cNumber => Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber(number= cNumber)), isUpdate))}
     }
   }
 
