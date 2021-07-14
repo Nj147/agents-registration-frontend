@@ -30,4 +30,5 @@ GET        /correspondence/:isUpdate        uk.gov.hmrc.agentsregfrontend.contro
 POST       /correspondence/:isUpdate        uk.gov.hmrc.agentsregfrontend.controllers.CorrespondenceController.processCorrespondence(isUpdate: Boolean)
 
 GET        /summary                         uk.gov.hmrc.agentsregfrontend.controllers.SummaryController.summary
+
 GET        /arn                             uk.gov.hmrc.agentsregfrontend.controllers.SummaryController.getArn
