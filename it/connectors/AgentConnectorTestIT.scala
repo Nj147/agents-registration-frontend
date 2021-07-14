@@ -36,12 +36,12 @@ class AgentConnectorTestIT extends AnyWordSpec with Matchers with GuiceOneServer
 
   "POST /register" should {
     "return ARN when accepted response returned" in {
-      stubPost("/registerAgent", 201, """{ "arn": "ARN150009"}""")
+      stubPost("/register-agent", 201, """{ "arn": "ARN150009"}""")
       val result = connector.createAgent(obj)
       await(result) shouldBe Some(Agent("ARN150009"))
     }
     "return None when bad request response «returned" in {
-      stubPost("/registerAgent", 500, "")
+      stubPost("/register-agent", 500, "")
       val result = connector.createAgent(obj)
       await(result) shouldBe None
     }
