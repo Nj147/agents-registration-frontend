@@ -18,10 +18,8 @@ package uk.gov.hmrc.agentsregfrontend.models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class Agent(arn: String)
+case class RegisteringUser(password: String, businessName: String, email: String, mobileNumber: Long, moc: Seq[String], propertyNumber: String, postcode: String)
 
-object Agent {
-  implicit val format: OFormat[Agent] = Json.format[Agent]
+object RegisteringUser {
+  implicit val format: OFormat[RegisteringUser] = Json.format[RegisteringUser]
 }
-
-

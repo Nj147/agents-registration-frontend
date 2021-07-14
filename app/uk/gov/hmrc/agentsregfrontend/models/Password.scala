@@ -16,12 +16,17 @@
 
 package uk.gov.hmrc.agentsregfrontend.models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.data.Form
+import play.api.data.Forms.{mapping, nonEmptyText, text}
 
-case class Agent(arn: String)
+case class Password(password: String, passwordCheck: String)
 
-object Agent {
-  implicit val format: OFormat[Agent] = Json.format[Agent]
+object Password {
+  val passwordForm: Form[Password] = {
+    Form(
+      mapping(
+        "password" -> nonEmptyText(8),
+        "passwordCheck" -> text
+      )(Password.apply)(Password.unapply))
+  }
 }
-
-

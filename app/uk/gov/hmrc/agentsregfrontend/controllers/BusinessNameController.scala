@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentsregfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsregfrontend.models._
-import uk.gov.hmrc.agentsregfrontend.views.html.{BusinessNamePage, SummaryPage}
+import uk.gov.hmrc.agentsregfrontend.views.html.BusinessNamePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
 
