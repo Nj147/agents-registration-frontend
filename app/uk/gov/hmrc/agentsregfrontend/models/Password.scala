@@ -17,32 +17,15 @@
 package uk.gov.hmrc.agentsregfrontend.models
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, text}
-import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
-import scala.util.matching.Regex
+import play.api.data.Forms.{mapping, nonEmptyText, text}
 
 case class Password(password: String, passwordCheck: String)
 
 object Password {
-  val regex: Regex = """^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$""".r
-
-  val passwordCheckConstraint: Constraint[String] = Constraint("constraints.passwordcheck")({ plainText =>
-    val errors = plainText match {
-      case regex() => Nil
-      case _ => Seq(ValidationError("Password is invalid"))
-    }
-    if (errors.isEmpty) {
-      Valid
-    } else {
-      Invalid(errors)
-    }
-  })
-
-
   val passwordForm: Form[Password] = {
     Form(
       mapping(
-        "password" -> text.verifying(passwordCheckConstraint),
+        "password" -> nonEmptyText(8),
         "passwordCheck" -> text
       )(Password.apply)(Password.unapply))
   }
