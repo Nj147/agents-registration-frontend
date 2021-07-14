@@ -9,13 +9,13 @@ GET        /email/:isUpdate                 uk.gov.hmrc.agentsregfrontend.contro
 +nocsrf
 POST       /email/:isUpdate                 uk.gov.hmrc.agentsregfrontend.controllers.EmailController.processEmail(isUpdate: Boolean)
 
-GET        /contactNumber/:isUpdate         uk.gov.hmrc.agentsregfrontend.controllers.ContactNumberController.displayContactPage(isUpdate: Boolean)
+GET        /contact-number/:isUpdate        uk.gov.hmrc.agentsregfrontend.controllers.ContactNumberController.displayContactPage(isUpdate: Boolean)
 +nocsrf
-POST       /contactNumber/:isUpdate         uk.gov.hmrc.agentsregfrontend.controllers.ContactNumberController.processContactNumber(isUpdate: Boolean)
+POST       /contact-number/:isUpdate        uk.gov.hmrc.agentsregfrontend.controllers.ContactNumberController.processContactNumber(isUpdate: Boolean)
 
-GET        /businessName/:isUpdate          uk.gov.hmrc.agentsregfrontend.controllers.BusinessNameController.displayBusinessNamePage(isUpdate: Boolean)
+GET        /business-name/:isUpdate         uk.gov.hmrc.agentsregfrontend.controllers.BusinessNameController.displayBusinessNamePage(isUpdate: Boolean)
 +nocsrf
-POST       /businessName/:isUpdate          uk.gov.hmrc.agentsregfrontend.controllers.BusinessNameController.processBusinessName(isUpdate: Boolean)
+POST       /business-name/:isUpdate         uk.gov.hmrc.agentsregfrontend.controllers.BusinessNameController.processBusinessName(isUpdate: Boolean)
 
 GET        /password                        uk.gov.hmrc.agentsregfrontend.controllers.PasswordController.displayPasswordPage
 +nocsrf
@@ -30,5 +30,4 @@ GET        /correspondence/:isUpdate        uk.gov.hmrc.agentsregfrontend.contro
 POST       /correspondence/:isUpdate        uk.gov.hmrc.agentsregfrontend.controllers.CorrespondenceController.processCorrespondence(isUpdate: Boolean)
 
 GET        /summary                         uk.gov.hmrc.agentsregfrontend.controllers.SummaryController.summary
-
 GET        /arn                             uk.gov.hmrc.agentsregfrontend.controllers.SummaryController.getArn
