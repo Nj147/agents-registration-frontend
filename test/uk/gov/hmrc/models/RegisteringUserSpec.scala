@@ -32,7 +32,7 @@ class RegisteringUserSpec extends AnyWordSpec with BeforeAndAfter with Matchers 
       |"password": "pa55w0rd",
       |"businessName": "Business Ltd",
       |"email": "john@gmail.com",
-      |"mobileNumber": 74134323,
+      |"contactNumber": 74134323,
       |"moc" : [
       |    "Text message"
       |],
