@@ -7,6 +7,10 @@
 @layout(pageTitle = Some("Summary")) {
 <a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
 <h1 class="govuk-heading-xl">Summary</h1>
+<div id="with-hint-hint" class="govuk-hint">
+    Below are the details you entered. If these are correct press submit to continue or back to alter details.
+    Please ensure these are correct, as some details cannot be changed after submission.
+</div>
 @govukSummaryList(SummaryList(
 rows = Seq(
 SummaryListRow(

@@ -1,49 +1,51 @@
 @import uk.gov.hmrc.agentsregfrontend.models.BusinessName
 @import uk.gov.hmrc.govukfrontend.views.html.components._
-@this(layout: Layout, govukInput : GovukInput, govukErrorSummary : GovukErrorSummary, govukButton: GovukButton)
+@this(layout: Layout, govukInput : GovukInput, govukErrorSummary : GovukErrorSummary)
 
 @(form: Form[BusinessName], isUpdate: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Business Name Details")) {
-<a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
+<a href="@request.headers.get(" referer")" class="govuk-back-link">Back</a>
 <h1 class="govuk-heading-xl">Enter Business Name:</h1>
 @if(form.errors.nonEmpty) {
-    @defining(form.errors.map { error =>
-        ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))
-        }) {errorLinks => @govukErrorSummary(ErrorSummary(
-        errorList = errorLinks,
-        title = Text(messages("There is a problem"))
-        ))
-    }
+@defining(form.errors.map { error =>
+ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))
+}) {errorLinks => @govukErrorSummary(ErrorSummary(
+errorList = errorLinks,
+title = Text(messages("There is a problem"))
+))
+}
 }
 @helper.form(uk.gov.hmrc.agentsregfrontend.controllers.routes.BusinessNameController.processBusinessName(isUpdate)) {
 <div class="govuk-form-group">
     @if(form.errors("businessName").nonEmpty) {
-        @govukInput(Input(
-        id = "businessName",
-        name = "businessName",
-        value = Some(form.data("businessName")),
-        classes = "govuk-input--width-10",
-        errorMessage = Some(ErrorMessage(
-        content = Text("Please enter a valid business Name"))),
-        label = Label(
-        isPageHeading = true,
-        classes = "govuk-label--m",
-        content = Text("Business Name")
-        )
-        ))
+    @govukInput(Input(
+    id = "businessName",
+    name = "businessName",
+    value = Some(form.data("businessName")),
+    classes = "govuk-input--width-10",
+    hint = Some(Hint(content = Text("Enter the registered name of your business, this cannot be changed once submitted at the end, for example - 'McDonalds'"))),
+    errorMessage = Some(ErrorMessage(
+    content = Text("Please enter a valid business Name"))),
+    label = Label(
+    isPageHeading = true,
+    classes = "govuk-label--m",
+    content = Text("Business Name")
+    )
+    ))
     } else {
-        @govukInput(Input(
-        id = "businessName",
-        name = "businessName",
-        value = Some(form.data("businessName")),
-        classes = "govuk-input--width-10",
-        label = Label(
-        isPageHeading = true,
-        classes = "govuk-label--m",
-        content = Text("Business Name")
-        )
-        ))
+    @govukInput(Input(
+    id = "businessName",
+    name = "businessName",
+    value = Some(form.data("businessName")),
+    classes = "govuk-input--width-10",
+    hint = Some(Hint(content = Text("Enter the registered name of your business, this cannot be changed once submitted at the end, for example - 'McDonalds'"))),
+    label = Label(
+    isPageHeading = true,
+    classes = "govuk-label--m",
+    content = Text("Business Name")
+    )
+    ))
     }
     <br>
     <button id="next-button" class="govuk-button" data-module="govuk-button">
