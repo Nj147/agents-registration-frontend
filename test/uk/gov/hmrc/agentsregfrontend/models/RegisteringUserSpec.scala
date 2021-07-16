@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.models
+package uk.gov.hmrc.agentsregfrontend.models
 
 import org.scalatest.BeforeAndAfter
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.{JsSuccess, JsValue, Json}
-import uk.gov.hmrc.agentsregfrontend.models.RegisteringUser
 
 class RegisteringUserSpec extends AnyWordSpec with BeforeAndAfter with Matchers {
 
