@@ -25,7 +25,7 @@ object Password {
   val passwordForm: Form[Password] = {
     Form(
       mapping(
-        "password" -> nonEmptyText(8),
+        "password" -> nonEmptyText(10),
         "passwordCheck" -> text
       )(Password.apply)(Password.unapply))
   }

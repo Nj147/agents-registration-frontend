@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agrentsregfrontend.services
+package uk.gov.hmrc.agentsregfrontend.services
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{mock, when}
@@ -26,7 +26,6 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.agentsregfrontend.connectors.AgentConnector
 import uk.gov.hmrc.agentsregfrontend.models.{Agent, RegisteringUser}
-import uk.gov.hmrc.agentsregfrontend.services.SummaryService
 
 import scala.concurrent.Future
 
@@ -42,7 +41,7 @@ class SummaryServiceSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSu
 
   val connector: AgentConnector = mock(classOf[AgentConnector])
   val service = new SummaryService(connector)
-  val user = RegisteringUser("password", "businessName", "email", "0456".toInt, List("gg"), "propertyNumber", "postcode")
+  val user: RegisteringUser = RegisteringUser("password", "businessName", "email", "0456".toInt, List("gg"), "propertyNumber", "postcode")
 
   "agentDetails" should {
     "return the ARN value" in {

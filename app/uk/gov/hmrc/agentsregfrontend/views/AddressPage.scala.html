@@ -25,6 +25,7 @@ title = Text(messages("There is a problem"))
     value= Some(form.data("propertyNumber")),
     name = "propertyNumber",
     classes = "govuk-input--width-10",
+    hint = Some(Hint(content = Text("The registered property number of your business, for example - '103b'"))),
     errorMessage = Some(ErrorMessage(
     content = Text("Invalid address"))),
     label = Label(
@@ -38,6 +39,7 @@ title = Text(messages("There is a problem"))
     id = "propertyNumber",
     name = "propertyNumber",
     value= Some(form.data("propertyNumber")),
+    hint = Some(Hint(content = Text("The registered property number of your business, for example - '103b'"))),
     classes = "govuk-input--width-10",
     label = Label(
     isPageHeading = true,
@@ -53,6 +55,7 @@ title = Text(messages("There is a problem"))
     name = "postcode",
     value = Some(form.data("postcode")),
     classes = "govuk-input--width-10",
+    hint = Some(Hint(content = Text("The registered postcode of your business, for example - 'HA8 3NY'"))),
     errorMessage = Some(ErrorMessage(
     content = Text("Invalid postcode"))),
     label = Label(
@@ -66,6 +69,7 @@ title = Text(messages("There is a problem"))
     id = "postcode",
     name = "postcode",
     value = Some(form.data("postcode")),
+    hint = Some(Hint(content = Text("The registered postcode of your business, for example - 'HA8 3NY'"))),
     classes = "govuk-input--width-10",
     label = Label(
     isPageHeading = true,
