@@ -24,11 +24,12 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, session, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsregfrontend.models.Agent
 import uk.gov.hmrc.agentsregfrontend.services.SummaryService
 import uk.gov.hmrc.agentsregfrontend.views.html.{ARNFailurePage, ARNSuccessPage, SummaryPage}
+
 import scala.concurrent.Future
 
 class SummaryControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
@@ -55,11 +56,12 @@ class SummaryControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPe
     }
   }
   "GET / arn" should {
-    "Returns 200 with the ARN value"in  {
+    "Returns 200 with the ARN value on the page and in the session"in  {
       when(service.agentDetails(any())) thenReturn(Future.successful(Some(Agent("ARN0000005"))))
       val result = controller.getArn.apply(FakeRequest("GET", "/").withSession("password"  -> "testPassword", "businessName" -> "testBusinessName", "email" -> "testEmail", "contactNumber" -> "09876", "modes" -> "test,test", "address" -> "propertyNum/postcode"))
       status(result) shouldBe 200
       Jsoup.parse(contentAsString(result)).text() should include("ARN0000005")
+      session(result).get("arn") shouldBe Some("ARN0000005")
     }
     "Returns 400 with the ARN value"in  {
       when(service.agentDetails(any())) thenReturn Future.successful(None)
