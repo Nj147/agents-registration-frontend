@@ -30,8 +30,7 @@ class BusinessNameController @Inject()(mcc: MessagesControllerComponents, busine
       case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
       case None => request.session.get("businessName").fold(
         Ok(businessNamePage(BusinessName.form.fill(BusinessName(businessName = "")), isUpdate))
-      )
-      { bName => Ok(businessNamePage(BusinessName.form.fill(BusinessName(businessName = bName)), isUpdate)) }
+      ) { bName => Ok(businessNamePage(BusinessName.form.fill(BusinessName(businessName = bName)), isUpdate)) }
     }
   }
 

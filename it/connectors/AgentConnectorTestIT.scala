@@ -28,7 +28,7 @@ import uk.gov.hmrc.agentsregfrontend.models.{Agent, RegisteringUser}
 class AgentConnectorTestIT extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach {
   lazy val connector: AgentConnector = injector.instanceOf[AgentConnector]
 
-  val obj = RegisteringUser("password", "business", "email", 1234, List("call", "text message"), "addressline1", "postcode")
+  val obj: RegisteringUser = RegisteringUser("password", "business", "email", "1234", List("call", "text message"), "addressline1", "postcode")
 
   override def beforeEach(): Unit = startWireMock()
 
