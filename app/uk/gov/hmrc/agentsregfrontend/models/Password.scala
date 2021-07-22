@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentsregfrontend.models
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText, text}
+import play.api.data.Forms.{mapping, text}
 
 case class Password(password: String, passwordCheck: String)
 
@@ -25,7 +25,7 @@ object Password {
   val passwordForm: Form[Password] = {
     Form(
       mapping(
-        "password" -> nonEmptyText(10),
+        "password" -> text(10),
         "passwordCheck" -> text
       )(Password.apply)(Password.unapply))
   }
