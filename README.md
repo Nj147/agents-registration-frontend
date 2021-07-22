@@ -11,7 +11,7 @@ follows our registration path which consists of the pages listed below:
 - Corrorspondence Page
 - Password page
 
-####Standards:
+### Standards:
 To keep the pages accessible to a wide audience, the service follows hmrc guidlines through 
 the whole service keeping uniformity throughout.
 
