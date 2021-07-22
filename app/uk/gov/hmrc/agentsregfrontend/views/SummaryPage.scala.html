@@ -5,11 +5,10 @@
 @(user: RegisteringUser)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Summary")) {
-<a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
 <h1 class="govuk-heading-xl">Summary</h1>
 <div id="with-hint-hint" class="govuk-hint">
-    Below are the details you entered. If these are correct press submit to continue or back to alter details.
-    Please ensure these are correct, as some details cannot be changed after submission.
+    Below are the details you entered. Please ensure these are correct, as some details cannot be changed after submission.
+    If you are happy with your details press the Submit button or you can cancel your application with the Cancel button
 </div>
 @govukSummaryList(SummaryList(
 rows = Seq(
@@ -103,4 +102,6 @@ visuallyHiddenText = Some("contact details")
 <form action="@uk.gov.hmrc.agentsregfrontend.controllers.routes.SummaryController.getArn()">
     <button id="next-button" class="govuk-button" data-module="govuk-button">Submit</button>
 </form>
+<hr>
+<a href="http://localhost:9005/agents-frontend/start-page" class="govuk-link cancel">Cancel</a>
 }

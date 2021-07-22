@@ -5,7 +5,9 @@
 @(form: Form[Correspondence], isUpdate: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Correspondence")) {
-<a href="@request.headers.get(" referer")" class="govuk-back-link">Back</a>
+@if(!isUpdate) {
+<a href="@uk.gov.hmrc.agentsregfrontend.controllers.routes.AddressController.displayAddressPage(false)" class="govuk-back-link">Back</a>
+}
 
 @if(form.errors.nonEmpty) {
 @defining(form.errors.map { error =>
@@ -57,8 +59,12 @@ name = Some("modes[3]")
 ))
 <br>
 <button id="next-button" class="govuk-button" data-module="govuk-button">
-    Next
+    Continue
 </button>
+@if(isUpdate) {
+<hr>
+<a href="@uk.gov.hmrc.agentsregfrontend.controllers.routes.SummaryController.summary" class="govuk-link cancel">Cancel</a>
+}
 
 }
 
