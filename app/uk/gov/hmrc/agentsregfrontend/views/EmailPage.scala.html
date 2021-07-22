@@ -5,7 +5,9 @@
 @(form: Form[Email], isUpdate: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Email")) {
-<a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
+@if(!isUpdate) {
+<a href="@uk.gov.hmrc.agentsregfrontend.controllers.routes.BusinessNameController.displayBusinessNamePage(false)" class="govuk-back-link">Back</a>
+}
 <h1 class="govuk-heading-xl">Enter Email Address </h1>
 @if(form.errors.nonEmpty) {
 @defining(form.errors.map { error =>
@@ -52,6 +54,10 @@ title = Text(messages("There is a problem"))
     <button id="next-button" class="govuk-button" data-module="govuk-button">
         Next
     </button>
+    @if(isUpdate) {
+    <hr>
+    <a href="@uk.gov.hmrc.agentsregfrontend.controllers.routes.SummaryController.summary" class="govuk-link cancel">Cancel</a>
+    }
 </div>
 }
 }
