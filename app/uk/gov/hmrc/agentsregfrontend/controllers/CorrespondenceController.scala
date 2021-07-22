@@ -20,7 +20,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsregfrontend.models.Correspondence
 import uk.gov.hmrc.agentsregfrontend.views.html.CorrespondencePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import javax.inject.Inject
 
 class CorrespondenceController @Inject()(mcc: MessagesControllerComponents, page: CorrespondencePage) extends FrontendController(mcc) {
@@ -31,7 +30,6 @@ class CorrespondenceController @Inject()(mcc: MessagesControllerComponents, page
       case None => Ok(page(Correspondence.correspondenceForm, isUpdate))
     }
   }
-
 
   def processCorrespondence(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
     val response = Correspondence.correspondenceForm.bindFromRequest.get

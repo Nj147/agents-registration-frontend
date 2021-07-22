@@ -24,14 +24,14 @@ import play.api.libs.json.{JsSuccess, JsValue, Json}
 class RegisteringUserSpec extends AnyWordSpec with BeforeAndAfter with Matchers {
 
   val moc: List[String] = List("Text message")
-  val regUser: RegisteringUser = RegisteringUser("pa55w0rd", "Business Ltd", "john@gmail.com", 74134323, moc, "21", "SE12 1BU")
+  val regUser: RegisteringUser = RegisteringUser("pa55w0rd", "Business Ltd", "john@gmail.com", "074134323", moc, "21", "SE12 1BU")
 
   val regUserJs: JsValue = Json.parse(
     """{
       |"password": "pa55w0rd",
       |"businessName": "Business Ltd",
       |"email": "john@gmail.com",
-      |"contactNumber": 74134323,
+      |"contactNumber": "074134323",
       |"moc" : [
       |    "Text message"
       |],

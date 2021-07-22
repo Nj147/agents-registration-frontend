@@ -17,31 +17,14 @@
 package uk.gov.hmrc.agentsregfrontend.models
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, text}
-import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
-
-import scala.util.matching.Regex
+import play.api.data.Forms.{mapping, nonEmptyText}
 
 case class ContactNumber(number: String)
 
 object ContactNumber {
-  val validNumber: Regex = """\d{11}""".r
-
-  val valid: Constraint[String] = Constraint("constraints.number")({ plainText =>
-    val errors = plainText match {
-      case validNumber() => Nil
-      case _ => Seq(ValidationError("Please Enter an 11 digit, UK Phone Number e.g 07123456789"))
-    }
-    if (errors.isEmpty) {
-      Valid
-    } else {
-      Invalid(errors)
-    }
-  })
-
   val contactForm: Form[ContactNumber] =
     Form(
       mapping(
-        "number" -> text.verifying(valid)
+        "number" -> nonEmptyText.verifying("Please Enter a 10-11 digit, UK Phone Number e.g 07123456789", _.length >= 10).verifying("Please Enter a 10-11 digit, UK Phone Number e.g 07123456789", _.length <= 11)
       )(ContactNumber.apply)(ContactNumber.unapply))
 }

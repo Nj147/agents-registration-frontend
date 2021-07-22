@@ -19,7 +19,6 @@ package uk.gov.hmrc.agentsregfrontend.controllers
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsregfrontend.models.Email
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import javax.inject.Inject
 import uk.gov.hmrc.agentsregfrontend.views.html.EmailPage
 
@@ -32,8 +31,7 @@ class EmailController @Inject()(mcc: MessagesControllerComponents,
       case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
       case None => request.session.get("email").fold(
         Ok(emailPage(Email.emailForm.fill(Email(email = "")), isUpdate))
-      )
-      { x => Ok(emailPage(Email.emailForm.fill(Email(email = x)), isUpdate)) }
+      ) { x => Ok(emailPage(Email.emailForm.fill(Email(email = x)), isUpdate)) }
     }
   }
 

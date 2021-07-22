@@ -20,7 +20,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsregfrontend.models.ContactNumber
 import uk.gov.hmrc.agentsregfrontend.views.html.ContactNumberPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import javax.inject.Inject
 
 class ContactNumberController @Inject()(mcc: MessagesControllerComponents,
@@ -32,9 +31,8 @@ class ContactNumberController @Inject()(mcc: MessagesControllerComponents,
       case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
       case None =>
         request.session.get("contactNumber").fold(
-          Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber(number= "")), isUpdate))
-        )
-        {cNumber => Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber(number= cNumber)), isUpdate))}
+          Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber(number = "")), isUpdate))
+        ) { cNumber => Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber(number = cNumber)), isUpdate)) }
     }
   }
 
@@ -42,7 +40,7 @@ class ContactNumberController @Inject()(mcc: MessagesControllerComponents,
     ContactNumber.contactForm.bindFromRequest().fold(
       formWithErrors => BadRequest(cnPage(formWithErrors, false)),
       response =>
-        if(isUpdate) {
+        if (isUpdate) {
           Redirect(routes.SummaryController.summary()).withSession(request.session + ("contactNumber" -> response.number))
         } else {
           Redirect(routes.AddressController.displayAddressPage(isUpdate = false)).withSession(request.session + ("contactNumber" -> response.number))

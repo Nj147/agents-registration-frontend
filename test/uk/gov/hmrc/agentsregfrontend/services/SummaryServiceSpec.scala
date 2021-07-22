@@ -29,23 +29,23 @@ import uk.gov.hmrc.agentsregfrontend.models.{Agent, RegisteringUser}
 
 import scala.concurrent.Future
 
-class SummaryServiceSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite{
+class SummaryServiceSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
   override def fakeApplication(): Application =
     new GuiceApplicationBuilder()
       .configure(
-        "metrics.jvm"     -> false,
+        "metrics.jvm" -> false,
         "metrics.enabled" -> false
       )
       .build()
 
   val connector: AgentConnector = mock(classOf[AgentConnector])
   val service = new SummaryService(connector)
-  val user: RegisteringUser = RegisteringUser("password", "businessName", "email", "0456".toInt, List("gg"), "propertyNumber", "postcode")
+  val user: RegisteringUser = RegisteringUser("password", "businessName", "email", "0456", List("gg"), "propertyNumber", "postcode")
 
   "agentDetails" should {
     "return the ARN value" in {
-      when(connector.createAgent(any())) thenReturn(Future.successful(Some(Agent("ARN0000005"))))
+      when(connector.createAgent(any())) thenReturn (Future.successful(Some(Agent("ARN0000005"))))
       val result = service.agentDetails(user)
       await(result) shouldBe Some(Agent("ARN0000005"))
     }
