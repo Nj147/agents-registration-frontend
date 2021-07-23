@@ -17,33 +17,32 @@
 package uk.gov.hmrc.agentsregfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.agentsregfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsregfrontend.models.Address
 import uk.gov.hmrc.agentsregfrontend.views.html.AddressPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
 
-class AddressController @Inject()(mcc: MessagesControllerComponents, addressPage: AddressPage)
-  extends FrontendController(mcc) {
+class AddressController @Inject()(mcc: MessagesControllerComponents,
+                                  addressPage: AddressPage,
+                                  loginChecker: LoginChecker) extends FrontendController(mcc) {
 
   def displayAddressPage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    request.session.get("arn") match {
-      case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
-      case None =>
-        request.session.get("address").fold(
-          Ok(addressPage(Address.addressForm.fill(Address(propertyNumber = "", postcode = "")), isUpdate))
-        ) { address => Ok(addressPage(Address.addressForm.fill(Address.decode(address)), isUpdate)) }
-    }
+    loginChecker.isLoggedIn(_ => request.session.get("address").fold(
+      Ok(addressPage(Address.addressForm.fill(Address(propertyNumber = "", postcode = "")), isUpdate))
+    ) { address => Ok(addressPage(Address.addressForm.fill(Address.decode(address)), isUpdate)) })
   }
 
   def processAddress(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    Address.addressForm.bindFromRequest().fold(
-      formWithErrors => BadRequest(addressPage(formWithErrors, isUpdate)),
-      response =>
-        if (isUpdate) {
-          Redirect(routes.SummaryController.summary()).withSession(request.session + ("address" -> response.encode))
-        } else {
-          Redirect(routes.CorrespondenceController.displayCorrespondencePage(isUpdate = false)).withSession(request.session + ("address" -> response.encode))
-        }
-    )
+    loginChecker.isLoggedIn(_ =>
+      Address.addressForm.bindFromRequest().fold(
+        formWithErrors => BadRequest(addressPage(formWithErrors, isUpdate)),
+        response =>
+          if (isUpdate) {
+            Redirect(routes.SummaryController.summary()).withSession(request.session + ("address" -> response.encode))
+          } else {
+            Redirect(routes.CorrespondenceController.displayCorrespondencePage(isUpdate = false)).withSession(request.session + ("address" -> response.encode))
+          }
+      ))
   }
 }

@@ -22,10 +22,12 @@ import uk.gov.hmrc.agentsregfrontend.views.html.BusinessNamePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
 
-class BusinessNameController @Inject()(mcc: MessagesControllerComponents, businessNamePage: BusinessNamePage)
-  extends FrontendController(mcc) {
+class BusinessNameController @Inject()(mcc: MessagesControllerComponents,
+                                       businessNamePage: BusinessNamePage) extends FrontendController(mcc) {
 
   def displayBusinessNamePage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
+
+
     request.session.get("arn") match {
       case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
       case None => request.session.get("businessName").fold(
