@@ -26,10 +26,10 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, session, status}
 import play.api.test.{FakeRequest, Helpers}
+import uk.gov.hmrc.agentsregfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsregfrontend.models.Agent
 import uk.gov.hmrc.agentsregfrontend.services.SummaryService
 import uk.gov.hmrc.agentsregfrontend.views.html.{ARNFailurePage, ARNSuccessPage, SummaryPage}
-
 import scala.concurrent.Future
 
 class SummaryControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
@@ -46,7 +46,8 @@ class SummaryControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPe
   val summaryPage: SummaryPage = app.injector.instanceOf[SummaryPage]
   val arnSuccess: ARNSuccessPage = app.injector.instanceOf[ARNSuccessPage]
   val arnFailure: ARNFailurePage = app.injector.instanceOf[ARNFailurePage]
-  val controller = new SummaryController(Helpers.stubMessagesControllerComponents(),service,summaryPage,arnSuccess,arnFailure)
+  val login: LoginChecker = app.injector.instanceOf[LoginChecker]
+  val controller = new SummaryController(Helpers.stubMessagesControllerComponents(),service,login,summaryPage,arnSuccess,arnFailure)
 
   "GET /summary" should {
     "get all the session values and send them to the summary page" in  {
