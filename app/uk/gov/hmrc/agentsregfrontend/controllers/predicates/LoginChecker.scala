@@ -18,13 +18,22 @@ package uk.gov.hmrc.agentsregfrontend.controllers.predicates
 
 import play.api.mvc.{AnyContent, MessagesControllerComponents, MessagesRequest, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+
 import javax.inject.Inject
+import scala.concurrent.Future
 
-class LoginChecker @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc){
+class LoginChecker @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc) {
 
-  def isLoggedIn(func:(Any) => Result)(implicit request: MessagesRequest[AnyContent]): Result = {
+  def isLoggedIn(func: (Any) => Result)(implicit request: MessagesRequest[AnyContent]): Result = {
     request.session.get("arn") match {
       case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
+      case None => func()
+    }
+  }
+
+  def isLoggedInAsync(func: (Any) => Future[Result])(implicit request: MessagesRequest[AnyContent]): Future[Result] = {
+    request.session.get("arn") match {
+      case Some(_) => Future.successful(Redirect("http://localhost:9005/agents-frontend/dashboard"))
       case None => func()
     }
   }
