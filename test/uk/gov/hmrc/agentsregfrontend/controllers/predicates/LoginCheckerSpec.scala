@@ -31,38 +31,21 @@ class LoginCheckerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
   private val messages = app.injector.instanceOf[MessagesControllerComponents]
   private val controller = new LoginChecker(messages)
 
-  def fakefunc(request: Request[AnyContent]): Result = {
-    controller.isLoggedIn(_ => Ok("test"))(new MessagesRequest[AnyContent](request, messages.messagesApi))
-  }
-
-  def fakefuncAsync(request: Request[AnyContent]): Future[Result] = {
-    controller.isLoggedInAsync(_ => Future.successful(Ok("test")))(new MessagesRequest[AnyContent](request, messages.messagesApi))
-  }
-
-  "isloggedIn" should {
-    "redirects them to the dashbaord" in {
-      val result = Future.successful(fakefunc(FakeRequest("GET", "/").withSession("arn" -> "ARN")))
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result).get shouldBe "http://localhost:9005/agents-frontend/dashboard"
-    }
-    "allow them to continue with registration" in {
-      val result = Future.successful(fakefunc(FakeRequest("GET", "/")))
-      status(result) shouldBe OK
-    }
+  def fakefunc(request: Request[AnyContent]): Future[Result] = {
+    controller.authSession(_ => Future.successful(Ok("test")))(new MessagesRequest[AnyContent](request, messages.messagesApi))
   }
 
   "isloggedInAsync" should {
     "redirects them to the dashbaord" in {
-      val result = fakefuncAsync(FakeRequest("GET", "/").withSession("arn" -> "ARN"))
+      val result = fakefunc(FakeRequest("GET", "/").withSession("arn" -> "ARN"))
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).get shouldBe "http://localhost:9005/agents-frontend/dashboard"
     }
     "allows them to continue with registration" in {
-      val result = fakefuncAsync(FakeRequest("GET", "/"))
+      val result = fakefunc(FakeRequest("GET", "/"))
       status(result) shouldBe OK
       contentAsString(result) shouldBe "test"
     }
   }
-
 
 }
