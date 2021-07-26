@@ -17,38 +17,41 @@
 package uk.gov.hmrc.agentsregfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsregfrontend.models._
-import uk.gov.hmrc.agentsregfrontend.services.SummaryService
+import uk.gov.hmrc.agentsregfrontend.connectors.AgentConnector
+import uk.gov.hmrc.agentsregfrontend.controllers.predicates.LoginChecker
+import uk.gov.hmrc.agentsregfrontend.models.RegisteringUser
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.agentsregfrontend.views.html.{ARNFailurePage, ARNSuccessPage, SummaryPage}
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-class SummaryController @Inject()(mcc: MessagesControllerComponents, service: SummaryService, summarypage: SummaryPage, arnSuccess: ARNSuccessPage, arnFailure: ARNFailurePage) extends FrontendController(mcc) {
+class SummaryController @Inject()(mcc: MessagesControllerComponents,
+                                  connector: AgentConnector,
+                                  loginChecker: LoginChecker,
+                                  summarypage: SummaryPage,
+                                  arnSuccess: ARNSuccessPage,
+                                  arnFailure: ARNFailurePage) extends FrontendController(mcc) {
 
-  def summary: Action[AnyContent] = Action { implicit request =>
-    val businessName = request.session.get("businessName").get
-    val email = request.session.get("email").get
-    val contactNumber = request.session.get("contactNumber").get
-    val address = Address.decode(request.session.get("address").get)
-    val correspondence = Correspondence.decode(request.session.get("modes").get)
-    val password = request.session.get("password").get
-    val user = RegisteringUser(password, businessName, email, contactNumber, correspondence, address.propertyNumber, address.postcode)
-    Ok(summarypage(user))
+  def summary: Action[AnyContent] = Action async { implicit request =>
+    loginChecker.authSession(data => {
+      data.isComplete match {
+        case true => Future.successful(Ok(summarypage(data)))
+        case false => Future.successful(BadRequest("Registration failed"))
+      }
+    })
   }
 
   def getArn: Action[AnyContent] = Action async { implicit request =>
-    val businessName = request.session.get("businessName").get
-    val email = request.session.get("email").get
-    val contactNumber = request.session.get("contactNumber").get
-    val address = Address.decode(request.session.get("address").get)
-    val correspondence = Correspondence.decode(request.session.get("modes").get)
-    val password = request.session.get("password").get
-    val user = RegisteringUser(password, businessName, email, contactNumber, correspondence, address.propertyNumber, address.postcode)
-    service.agentDetails(user).map {
-      case Some(x) => Ok(arnSuccess(x)).withSession("arn" -> x.arn)
-      case None => BadRequest(arnFailure())
-    }
+    loginChecker.authSession(data => {
+      (request.session.get("password").isDefined, data.isComplete) match {
+        case (true, true) => connector.createAgent(RegisteringUser(request.session.get("password").get, data.businessName.get, data.email.get, data.contactNumber.get, data.correspondence.get, data.address.get.propertyNumber, data.address.get.postcode)).map {
+          case Some(x) => Ok(arnSuccess(x)).withSession("arn" -> x.arn)
+          case None => BadRequest(arnFailure())
+        }
+        case _ => Future.successful(BadRequest(arnFailure()))
+      }
+    })
   }
 
 }

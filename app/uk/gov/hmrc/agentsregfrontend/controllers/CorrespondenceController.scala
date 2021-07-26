@@ -17,31 +17,32 @@
 package uk.gov.hmrc.agentsregfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.agentsregfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsregfrontend.models.Correspondence
 import uk.gov.hmrc.agentsregfrontend.views.html.CorrespondencePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
+import scala.concurrent.Future
 
-class CorrespondenceController @Inject()(mcc: MessagesControllerComponents, page: CorrespondencePage) extends FrontendController(mcc) {
+class CorrespondenceController @Inject()(mcc: MessagesControllerComponents,
+                                         loginChecker: LoginChecker,
+                                         page: CorrespondencePage) extends FrontendController(mcc) {
 
-  def displayCorrespondencePage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    request.session.get("arn") match {
-      case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
-      case None => Ok(page(Correspondence.correspondenceForm, isUpdate))
-    }
+  def displayCorrespondencePage(isUpdate: Boolean): Action[AnyContent] = Action async { implicit request =>
+    loginChecker.authSession(_ => Future.successful(Ok(page(Correspondence.correspondenceForm, isUpdate))))
   }
 
-  def processCorrespondence(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    val response = Correspondence.correspondenceForm.bindFromRequest.get
-    response.modes.size match {
-      case 0 => BadRequest(page(Correspondence.correspondenceForm.withError("modes", "Please select at least one method of correspondence"), isUpdate = false))
-      case _ =>
-        if (isUpdate) {
-          Redirect(routes.SummaryController.summary()).withSession(request.session + ("modes" -> response.encode))
-        } else {
-          Redirect(routes.PasswordController.displayPasswordPage()).withSession(request.session + ("modes" -> response.encode))
+  def processCorrespondence(isUpdate: Boolean): Action[AnyContent] = Action async { implicit request =>
+    loginChecker.authSession(_ => {
+      val response = Correspondence.correspondenceForm.bindFromRequest.get
+      response.modes.size match {
+        case 0 => Future.successful(BadRequest(page(Correspondence.correspondenceForm.withError("modes", "Please select at least one method of correspondence"), isUpdate = false)))
+        case _ => isUpdate match {
+          case true => Future.successful(Redirect(routes.SummaryController.summary()).withSession(request.session + ("modes" -> response.encode)))
+          case false => Future.successful(Redirect(routes.PasswordController.displayPasswordPage()).withSession(request.session + ("modes" -> response.encode)))
         }
-    }
+      }
+    })
   }
 
 }

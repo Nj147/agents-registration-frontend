@@ -17,32 +17,33 @@
 package uk.gov.hmrc.agentsregfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.agentsregfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsregfrontend.models._
 import uk.gov.hmrc.agentsregfrontend.views.html.BusinessNamePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
+import scala.concurrent.Future
 
-class BusinessNameController @Inject()(mcc: MessagesControllerComponents, businessNamePage: BusinessNamePage)
-  extends FrontendController(mcc) {
+class BusinessNameController @Inject()(mcc: MessagesControllerComponents,
+                                       loginChecker: LoginChecker,
+                                       businessNamePage: BusinessNamePage) extends FrontendController(mcc) {
 
-  def displayBusinessNamePage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    request.session.get("arn") match {
-      case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
-      case None => request.session.get("businessName").fold(
-        Ok(businessNamePage(BusinessName.form.fill(BusinessName(businessName = "")), isUpdate))
-      ) { bName => Ok(businessNamePage(BusinessName.form.fill(BusinessName(businessName = bName)), isUpdate)) }
-    }
+  def displayBusinessNamePage(isUpdate: Boolean): Action[AnyContent] = Action async { implicit request =>
+
+    loginChecker.authSession(_.businessName.fold(
+      Future.successful(Ok(businessNamePage(BusinessName.form.fill(BusinessName("")), isUpdate)))
+    ) { businessName => Future.successful(Ok(businessNamePage(BusinessName.form.fill(BusinessName(businessName)), isUpdate))) })
   }
 
-  def processBusinessName(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    BusinessName.form.bindFromRequest().fold(
-      formWithErrors => BadRequest(businessNamePage(formWithErrors, isUpdate)),
-      response =>
-        if (isUpdate) {
-          Redirect(routes.SummaryController.summary()).withSession(request.session + ("businessName" -> response.businessName))
-        } else {
-          Redirect(routes.EmailController.displayEmailPage(isUpdate = false)).withSession(request.session + ("businessName" -> response.businessName))
+  def processBusinessName(isUpdate: Boolean): Action[AnyContent] = Action async { implicit request =>
+    loginChecker.authSession(_ =>
+      BusinessName.form.bindFromRequest().fold(
+        formWithErrors => Future.successful(BadRequest(businessNamePage(formWithErrors, isUpdate))),
+        response => isUpdate match {
+          case true => Future.successful(Redirect(routes.SummaryController.summary()).withSession(request.session + ("businessName" -> response.businessName)))
+          case false => Future.successful(Redirect(routes.EmailController.displayEmailPage(isUpdate = false)).withSession(request.session + ("businessName" -> response.businessName)))
         }
+      )
     )
   }
 }

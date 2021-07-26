@@ -17,33 +17,32 @@
 package uk.gov.hmrc.agentsregfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.agentsregfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsregfrontend.models.Email
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
 import uk.gov.hmrc.agentsregfrontend.views.html.EmailPage
+import scala.concurrent.Future
 
 class EmailController @Inject()(mcc: MessagesControllerComponents,
-                                emailPage: EmailPage)
-  extends FrontendController(mcc) {
+                                loginChecker: LoginChecker,
+                                emailPage: EmailPage) extends FrontendController(mcc) {
 
-  def displayEmailPage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    request.session.get("arn") match {
-      case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
-      case None => request.session.get("email").fold(
-        Ok(emailPage(Email.emailForm.fill(Email(email = "")), isUpdate))
-      ) { x => Ok(emailPage(Email.emailForm.fill(Email(email = x)), isUpdate)) }
-    }
+  def displayEmailPage(isUpdate: Boolean): Action[AnyContent] = Action async { implicit request =>
+    loginChecker.authSession(_.email.fold(
+      Future.successful(Ok(emailPage(Email.emailForm.fill(Email(email = "")), isUpdate)))
+    ) { email => Future.successful(Ok(emailPage(Email.emailForm.fill(Email(email)), isUpdate))) })
   }
 
-  def processEmail(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    Email.emailForm.bindFromRequest().fold(
-      formWithErrors => BadRequest(emailPage(formWithErrors, false)),
-      response =>
-        if (isUpdate) {
-          Redirect(routes.SummaryController.summary()).withSession(request.session + ("email" -> response.email))
-        } else {
-          Redirect(routes.ContactNumberController.displayContactPage(isUpdate = false)).withSession(request.session + ("email" -> response.email))
+  def processEmail(isUpdate: Boolean): Action[AnyContent] = Action async { implicit request =>
+    loginChecker.authSession(_ =>
+      Email.emailForm.bindFromRequest().fold(
+        formWithErrors => Future.successful(BadRequest(emailPage(formWithErrors, isUpdate = false))),
+        response => isUpdate match {
+          case true => Future.successful(Redirect(routes.SummaryController.summary()).withSession(request.session + ("email" -> response.email)))
+          case false => Future.successful(Redirect(routes.ContactNumberController.displayContactPage(isUpdate = false)).withSession(request.session + ("email" -> response.email)))
         }
+      )
     )
   }
 }

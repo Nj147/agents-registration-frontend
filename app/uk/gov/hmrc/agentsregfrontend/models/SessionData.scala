@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsregfrontend.services
+package uk.gov.hmrc.agentsregfrontend.models
 
-import uk.gov.hmrc.agentsregfrontend.connectors.AgentConnector
-import uk.gov.hmrc.agentsregfrontend.models.{Agent, RegisteringUser}
-import javax.inject.Inject
-import scala.concurrent.Future
+case class SessionData(businessName: Option[String], email: Option[String], contactNumber: Option[String], correspondence: Option[List[String]], address: Option[Address]) {
 
-class SummaryService @Inject()(connector: AgentConnector){
-
-  def agentDetails(agent: RegisteringUser): Future[Option[Agent]] ={
-    connector.createAgent(agent)
+  def isComplete: Boolean = {
+    businessName.isDefined && email.isDefined && contactNumber.isDefined && correspondence.exists(_.nonEmpty) && address.isDefined
   }
 
 }

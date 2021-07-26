@@ -1,8 +1,8 @@
-@import uk.gov.hmrc.agentsregfrontend.models.RegisteringUser
+@import uk.gov.hmrc.agentsregfrontend.models.SessionData
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @this(layout: Layout, govukSummaryList : GovukSummaryList)
 
-@(user: RegisteringUser)(implicit request: Request[_], messages: Messages)
+@(user: SessionData)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Summary")) {
 <h1 class="govuk-heading-xl">Summary</h1>
@@ -17,7 +17,7 @@ key = Key(
 content = Text("Business Name")
 ),
 value = Value(
-content = Text(user.businessName)
+content = Text(user.businessName.get)
 ),
 actions = Some(Actions(
 items = Seq(
@@ -34,7 +34,7 @@ key = Key(
 content = Text("Email")
 ),
 value = Value(
-content = Text(user.email)
+content = Text(user.email.get)
 ),
 actions = Some(Actions(
 items = Seq(
@@ -51,7 +51,7 @@ key = Key(
 content = Text("Contact Number")
 ),
 value = Value(
-content = Text(user.contactNumber.toString())
+content = Text(user.contactNumber.get.toString())
 ),
 actions = Some(Actions(
 items = Seq(
@@ -68,7 +68,7 @@ key = Key(
 content = Text("Correspondence")
 ),
 value = Value(
-content = Text(user.moc.mkString(", "))
+content = Text(user.correspondence.get.mkString(", "))
 ),
 actions = Some(Actions(
 items = Seq(
@@ -85,7 +85,7 @@ key = Key(
 content = Text("Address")
 ),
 value = Value(
-content = Text(user.propertyNumber+", "+user.postcode)
+content = Text(user.address.get.propertyNumber+", "+user.address.get.postcode)
 ),
 actions = Some(Actions(
 items = Seq(

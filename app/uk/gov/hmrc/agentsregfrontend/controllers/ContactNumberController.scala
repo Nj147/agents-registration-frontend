@@ -17,34 +17,34 @@
 package uk.gov.hmrc.agentsregfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.agentsregfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsregfrontend.models.ContactNumber
 import uk.gov.hmrc.agentsregfrontend.views.html.ContactNumberPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+
 import javax.inject.Inject
+import scala.concurrent.Future
 
 class ContactNumberController @Inject()(mcc: MessagesControllerComponents,
-                                        cnPage: ContactNumberPage)
-  extends FrontendController(mcc) {
+                                        loginChecker: LoginChecker,
+                                        cnPage: ContactNumberPage) extends FrontendController(mcc) {
 
-  def displayContactPage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    request.session.get("arn") match {
-      case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
-      case None =>
-        request.session.get("contactNumber").fold(
-          Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber(number = "")), isUpdate))
-        ) { cNumber => Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber(number = cNumber)), isUpdate)) }
-    }
+  def displayContactPage(isUpdate: Boolean): Action[AnyContent] = Action async { implicit request =>
+    loginChecker.authSession(_.contactNumber.fold(
+      Future.successful(Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber("")), isUpdate)))
+    ) { contactNumber => Future.successful(Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber(contactNumber)), isUpdate))) }
+    )
   }
 
-  def processContactNumber(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    ContactNumber.contactForm.bindFromRequest().fold(
-      formWithErrors => BadRequest(cnPage(formWithErrors, false)),
-      response =>
-        if (isUpdate) {
-          Redirect(routes.SummaryController.summary()).withSession(request.session + ("contactNumber" -> response.number))
-        } else {
-          Redirect(routes.AddressController.displayAddressPage(isUpdate = false)).withSession(request.session + ("contactNumber" -> response.number))
+  def processContactNumber(isUpdate: Boolean): Action[AnyContent] = Action async { implicit request =>
+    loginChecker.authSession(_ =>
+      ContactNumber.contactForm.bindFromRequest().fold(
+        formWithErrors => Future.successful(BadRequest(cnPage(formWithErrors, isUpdate = false))),
+        response => isUpdate match {
+          case true => Future.successful(Redirect(routes.SummaryController.summary()).withSession(request.session + ("contactNumber" -> response.number)))
+          case false => Future.successful(Redirect(routes.AddressController.displayAddressPage(isUpdate = false)).withSession(request.session + ("contactNumber" -> response.number)))
         }
+      )
     )
   }
 }
