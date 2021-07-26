@@ -21,30 +21,29 @@ import uk.gov.hmrc.agentsregfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsregfrontend.models.ContactNumber
 import uk.gov.hmrc.agentsregfrontend.views.html.ContactNumberPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+
 import javax.inject.Inject
+import scala.concurrent.Future
 
 class ContactNumberController @Inject()(mcc: MessagesControllerComponents,
                                         loginChecker: LoginChecker,
                                         cnPage: ContactNumberPage) extends FrontendController(mcc) {
 
-  def displayContactPage(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    loginChecker.isLoggedIn(_ =>
-      request.session.get("contactNumber").fold(
-        Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber(number = "")), isUpdate))
-      ) { cNumber => Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber(number = cNumber)), isUpdate)) }
+  def displayContactPage(isUpdate: Boolean): Action[AnyContent] = Action async { implicit request =>
+    loginChecker.authSession(_.contactNumber.fold(
+      Future.successful(Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber("")), isUpdate)))
+    ) { contactNumber => Future.successful(Ok(cnPage(ContactNumber.contactForm.fill(ContactNumber(contactNumber)), isUpdate))) }
     )
   }
 
-  def processContactNumber(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    loginChecker.isLoggedIn(_ =>
+  def processContactNumber(isUpdate: Boolean): Action[AnyContent] = Action async { implicit request =>
+    loginChecker.authSession(_ =>
       ContactNumber.contactForm.bindFromRequest().fold(
-        formWithErrors => BadRequest(cnPage(formWithErrors, false)),
-        response =>
-          if (isUpdate) {
-            Redirect(routes.SummaryController.summary()).withSession(request.session + ("contactNumber" -> response.number))
-          } else {
-            Redirect(routes.AddressController.displayAddressPage(isUpdate = false)).withSession(request.session + ("contactNumber" -> response.number))
-          }
+        formWithErrors => Future.successful(BadRequest(cnPage(formWithErrors, isUpdate = false))),
+        response => isUpdate match {
+          case true => Future.successful(Redirect(routes.SummaryController.summary()).withSession(request.session + ("contactNumber" -> response.number)))
+          case false => Future.successful(Redirect(routes.AddressController.displayAddressPage(isUpdate = false)).withSession(request.session + ("contactNumber" -> response.number)))
+        }
       )
     )
   }

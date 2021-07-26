@@ -22,26 +22,24 @@ import uk.gov.hmrc.agentsregfrontend.models.Password
 import uk.gov.hmrc.agentsregfrontend.views.html.PasswordPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
+import scala.concurrent.Future
 
 class PasswordController @Inject()(mcc: MessagesControllerComponents,
                                    loginChecker: LoginChecker,
                                    passwordPage: PasswordPage) extends FrontendController(mcc) {
 
-  val displayPasswordPage: Action[AnyContent] = Action { implicit request =>
-    loginChecker.isLoggedIn(_ =>
-      Ok(passwordPage(Password.passwordForm))
-    )
+  val displayPasswordPage: Action[AnyContent] = Action async { implicit request =>
+    loginChecker.authSession(_ => Future.successful(Ok(passwordPage(Password.passwordForm))))
   }
 
-  def processPassword: Action[AnyContent] = Action { implicit request =>
-    loginChecker.isLoggedIn(_ =>
+  def processPassword: Action[AnyContent] = Action async { implicit request =>
+    loginChecker.authSession(_ =>
       Password.passwordForm.bindFromRequest.fold(
-        formWithErrors => {
-          BadRequest(passwordPage(formWithErrors))
+        formWithErrors => { Future.successful(BadRequest(passwordPage(formWithErrors)))
         }, formData => {
           formData.password match {
-            case formData.passwordCheck => Redirect(routes.SummaryController.summary()).withSession(request.session + ("password" -> formData.password))
-            case _ => BadRequest(passwordPage(Password.passwordForm.withError("passwordCheck", "Password does not match")))
+            case formData.passwordCheck => Future.successful(Redirect(routes.SummaryController.summary()).withSession(request.session + ("password" -> formData.password)))
+            case _ => Future.successful(BadRequest(passwordPage(Password.passwordForm.withError("passwordCheck", "Password does not match"))))
           }
         }
       )

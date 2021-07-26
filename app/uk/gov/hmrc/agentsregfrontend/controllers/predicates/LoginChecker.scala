@@ -19,25 +19,10 @@ package uk.gov.hmrc.agentsregfrontend.controllers.predicates
 import play.api.mvc.{AnyContent, MessagesControllerComponents, MessagesRequest, Result}
 import uk.gov.hmrc.agentsregfrontend.models.{Address, Correspondence, SessionData}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import javax.inject.Inject
 import scala.concurrent.Future
 
 class LoginChecker @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc) {
-
-  def isLoggedIn(func: (Any) => Result)(implicit request: MessagesRequest[AnyContent]): Result = {
-    request.session.get("arn") match {
-      case Some(_) => Redirect("http://localhost:9005/agents-frontend/dashboard")
-      case None => func()
-    }
-  }
-
-  def isLoggedInAsync(func: (Any) => Future[Result])(implicit request: MessagesRequest[AnyContent]): Future[Result] = {
-    request.session.get("arn") match {
-      case Some(_) => Future.successful(Redirect("http://localhost:9005/agents-frontend/dashboard"))
-      case None => func()
-    }
-  }
 
   def authSession(func: SessionData => Future[Result])(implicit request: MessagesRequest[AnyContent]): Future[Result] = {
     request.session.get("arn") match {
@@ -48,8 +33,7 @@ class LoginChecker @Inject()(mcc: MessagesControllerComponents) extends Frontend
         val contactNumber = request.session.get("contactNumber")
         val address = request.session.get("address").map(Address.decode)
         val correspondence = request.session.get("modes").map(Correspondence.decode)
-        val password = request.session.get("password")
-        val data = SessionData(businessName, email, contactNumber, correspondence, password, address)
+        val data = SessionData(businessName, email, contactNumber, correspondence, address)
         func(data)
     }
   }

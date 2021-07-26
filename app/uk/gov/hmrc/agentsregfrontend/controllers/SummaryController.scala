@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentsregfrontend.controllers
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsregfrontend.connectors.AgentConnector
 import uk.gov.hmrc.agentsregfrontend.controllers.predicates.LoginChecker
+import uk.gov.hmrc.agentsregfrontend.models.RegisteringUser
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.agentsregfrontend.views.html.{ARNFailurePage, ARNSuccessPage, SummaryPage}
 import javax.inject.Inject
@@ -32,19 +33,23 @@ class SummaryController @Inject()(mcc: MessagesControllerComponents,
                                   arnSuccess: ARNSuccessPage,
                                   arnFailure: ARNFailurePage) extends FrontendController(mcc) {
 
-  def summary: Action[AnyContent] = Action async{ implicit request =>
-    loginChecker.authSession(data => {data.isComplete match {
-      case true => Future.successful(Ok(summarypage(data)))
-      case false => Future.successful(BadRequest(""))
-    }
+  def summary: Action[AnyContent] = Action async { implicit request =>
+    loginChecker.authSession(data => {
+      data.isComplete match {
+        case true => Future.successful(Ok(summarypage(data)))
+        case false => Future.successful(BadRequest("Registration failed"))
+      }
     })
   }
 
   def getArn: Action[AnyContent] = Action async { implicit request =>
     loginChecker.authSession(data => {
-      connector.createAgent().map {
-        case Some(x) => Ok(arnSuccess(x)).withSession("arn" -> x.arn)
-        case None => BadRequest(arnFailure())
+      (request.session.get("password").isDefined, data.isComplete) match {
+        case (true, true) => connector.createAgent(RegisteringUser(request.session.get("password").get, data.businessName.get, data.email.get, data.contactNumber.get, data.correspondence.get, data.address.get.propertyNumber, data.address.get.postcode)).map {
+          case Some(x) => Ok(arnSuccess(x)).withSession("arn" -> x.arn)
+          case None => BadRequest(arnFailure())
+        }
+        case _ => Future.successful(BadRequest(arnFailure()))
       }
     })
   }

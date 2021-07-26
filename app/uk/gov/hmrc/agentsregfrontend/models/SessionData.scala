@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.agentsregfrontend.models
 
-case class SessionData(businessName: Option[String], email: Option[String], contactNumber: Option[String], correspondence: Option[List[String]], password: Option[String], address: Option[Address]) {
+case class SessionData(businessName: Option[String], email: Option[String], contactNumber: Option[String], correspondence: Option[List[String]], address: Option[Address]) {
+
   def isComplete: Boolean = {
-    businessName.isDefined && email.isDefined && contactNumber.isDefined && correspondence.exists(_.nonEmpty) && password.isDefined && address.isDefined
+    businessName.isDefined && email.isDefined && contactNumber.isDefined && correspondence.exists(_.nonEmpty) && address.isDefined
   }
 
 }
