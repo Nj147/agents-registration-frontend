@@ -54,8 +54,8 @@ title = Text(messages("There is a problem"))
     <button id="next-button" class="govuk-button" data-module="govuk-button">
         Continue
     </button>
-    <hr>
     @if(isUpdate) {
+    <hr>
     <a href="@uk.gov.hmrc.agentsregfrontend.controllers.routes.SummaryController.summary" class="govuk-link cancel">Cancel</a>
     }
 </div>
