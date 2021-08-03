@@ -8,7 +8,6 @@
 @if(!isUpdate) {
 <a href="http://localhost:9005/agents-frontend/start-page" class="govuk-back-link">Back</a>
 }
-<h1 class="govuk-heading-xl">Enter Business Name</h1>
 @if(form.errors.nonEmpty) {
 @defining(form.errors.map { error =>
 ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))
@@ -25,13 +24,12 @@ title = Text(messages("There is a problem"))
     id = "businessName",
     name = "businessName",
     value = Some(form.data("businessName")),
-    classes = "govuk-input--width-10",
-    hint = Some(Hint(content = Text("Enter the registered name of your business, this cannot be changed once submitted at the end, for example - 'McDonalds'"))),
+    hint = Some(Hint(content = Text("Enter the registered name of your business, this cannot be changed once submitted at the end"))),
     errorMessage = Some(ErrorMessage(
-    content = Text("Please enter a valid business Name"))),
+    content = Text("What is your registered business name?"))),
     label = Label(
     isPageHeading = true,
-    classes = "govuk-label--m",
+    classes = "govuk-label--l",
     content = Text("Business Name")
     )
     ))
@@ -40,12 +38,11 @@ title = Text(messages("There is a problem"))
     id = "businessName",
     name = "businessName",
     value = Some(form.data("businessName")),
-    classes = "govuk-input--width-10",
-    hint = Some(Hint(content = Text("Enter the registered name of your business, this cannot be changed once submitted at the end, for example - 'McDonalds'"))),
+    hint = Some(Hint(content = Text("Enter the registered name of your business, this cannot be changed once submitted at the end"))),
     label = Label(
     isPageHeading = true,
-    classes = "govuk-label--m",
-    content = Text("Business Name")
+    classes = "govuk-label--l",
+    content = Text("What is your registered business name?")
     )
     ))
     }

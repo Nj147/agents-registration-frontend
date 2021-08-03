@@ -31,7 +31,7 @@ class EmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerS
   override def fakeApplication(): Application =
     new GuiceApplicationBuilder()
       .configure(
-        "metrics.jvm"     -> false,
+        "metrics.jvm" -> false,
         "metrics.enabled" -> false
       )
       .build()
@@ -48,11 +48,12 @@ class EmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerS
     "return HTML" in {
       val result = controller.displayEmailPage(isUpdate = false).apply(fakeRequest)
       contentType(result) shouldBe Some("text/html")
-      charset(result)     shouldBe Some("utf-8")
+      charset(result) shouldBe Some("utf-8")
     }
     "return a page with 1 input" in {
       val result = controller.displayEmailPage(isUpdate = false).apply(fakeRequest)
-      Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
+      Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input").size shouldBe 1
+      Jsoup.parse(contentAsString(result)).getElementsByTag("title").text() shouldBe "Email"
     }
     "have a pre-populated input field if already entered once" in {
       val result = controller.displayEmailPage(isUpdate = false).apply(fakeRequest.withSession("email" -> "test@test.com"))
