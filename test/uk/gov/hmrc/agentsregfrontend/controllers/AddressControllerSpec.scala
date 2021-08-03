@@ -52,7 +52,8 @@ class AddressControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPe
     }
     "return a page with 2 inputs" in {
       val result = controller.displayAddressPage(isUpdate = false).apply(fakeRequest)
-      Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 2
+      Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input").size shouldBe 2
+      Jsoup.parse(contentAsString(result)).getElementsByTag("title").text() shouldBe ("Business Address")
     }
     "have a pre-populated input fields if already entered once" in {
       val result = controller.displayAddressPage(isUpdate = false).apply(fakeRequest.withSession("address" -> "1 New Street/AA11 1AB"))

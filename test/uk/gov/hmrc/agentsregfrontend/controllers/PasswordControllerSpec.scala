@@ -53,7 +53,8 @@ class PasswordControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppP
     }
     "return a page with 2 input" in {
       val result = controller.displayPasswordPage(getfakeRequest)
-      Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 2
+      Jsoup.parse(contentAsString(result)).getElementsByTag("title").text() shouldBe "Password"
+      Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input").size shouldBe 2
     }
     "redirect if the user is logged in" in {
       val result = controller.displayPasswordPage(getfakeRequest.withSession("arn" -> "ARN0000001"))

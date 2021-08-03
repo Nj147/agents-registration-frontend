@@ -53,7 +53,8 @@ class BusinessNameControllerSpec extends AnyWordSpec with Matchers with GuiceOne
     }
     "return a page with 1 input" in {
       val result = controller.displayBusinessNamePage(isUpdate = false).apply(getfakeRequest)
-      Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
+      Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input").size shouldBe 1
+      Jsoup.parse(contentAsString(result)).getElementsByTag("title").text() shouldBe ("Business Name Details")
     }
     "have a pre-populated input field if already entered once" in {
       val result = controller.displayBusinessNamePage(isUpdate = false).apply(getfakeRequest.withSession("businessName" -> "Test Business Name"))

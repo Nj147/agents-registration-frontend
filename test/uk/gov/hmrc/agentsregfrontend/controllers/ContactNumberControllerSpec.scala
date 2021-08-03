@@ -52,7 +52,8 @@ class ContactNumberControllerSpec extends AnyWordSpec with Matchers with GuiceOn
     }
     "return a page with 1 input" in {
       val result = controller.displayContactPage(isUpdate = false).apply(fakeRequest)
-      Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
+      Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input").size shouldBe 1
+      Jsoup.parse(contentAsString(result)).getElementsByTag("title").text() shouldBe "Contact Number"
     }
     "have a pre-populated input field if already entered once" in {
       val result = controller.displayContactPage(isUpdate = false).apply(fakeRequest.withSession("contactNumber" -> "01234567890"))
