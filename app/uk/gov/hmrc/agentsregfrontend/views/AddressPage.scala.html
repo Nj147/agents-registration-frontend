@@ -8,7 +8,7 @@
 @if(!isUpdate) {
 <a href="@uk.gov.hmrc.agentsregfrontend.controllers.routes.ContactNumberController.displayContactPage(false)" class="govuk-back-link">Back</a>
 }
-<h1 class="govuk-heading-xl">Enter Address</h1>
+<h1 class="govuk-heading-xl">What is your address?</h1>
 @if(form.errors.nonEmpty) {
 @defining(form.errors.map { error =>
 ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))
@@ -27,13 +27,13 @@ title = Text(messages("There is a problem"))
     value= Some(form.data("propertyNumber")),
     name = "propertyNumber",
     classes = "govuk-input--width-10",
-    hint = Some(Hint(content = Text("The registered property number of your business, for example - '103b'"))),
+    hint = Some(Hint(content = Text("The registered property number or name of your business"))),
     errorMessage = Some(ErrorMessage(
     content = Text("Invalid address"))),
     label = Label(
     isPageHeading = true,
     classes = "govuk-label--m",
-    content = Text("Please enter the first line of your business address")
+    content = Text("Property number")
     )
     ))
     } else {
@@ -41,12 +41,11 @@ title = Text(messages("There is a problem"))
     id = "propertyNumber",
     name = "propertyNumber",
     value= Some(form.data("propertyNumber")),
-    hint = Some(Hint(content = Text("The registered property number of your business, for example - '103b'"))),
-    classes = "govuk-input--width-10",
+    hint = Some(Hint(content = Text("The registered property number of your business"))),
     label = Label(
     isPageHeading = true,
     classes = "govuk-label--m",
-    content = Text("Please enter the first line of your business address")
+    content = Text("Property number")
     )
     ))
     }
@@ -56,14 +55,14 @@ title = Text(messages("There is a problem"))
     id = "postcode",
     name = "postcode",
     value = Some(form.data("postcode")),
+    hint = Some(Hint(content = Text("The registered postcode of your business"))),
     classes = "govuk-input--width-10",
-    hint = Some(Hint(content = Text("The registered postcode of your business, for example - 'HA8 3NY'"))),
     errorMessage = Some(ErrorMessage(
     content = Text("Invalid postcode"))),
     label = Label(
     isPageHeading = true,
     classes = "govuk-label--m",
-    content = Text("Please enter your business postcode")
+    content = Text("Postcode")
     )
     ))
     } else {
@@ -71,12 +70,12 @@ title = Text(messages("There is a problem"))
     id = "postcode",
     name = "postcode",
     value = Some(form.data("postcode")),
-    hint = Some(Hint(content = Text("The registered postcode of your business, for example - 'HA8 3NY'"))),
+    hint = Some(Hint(content = Text("The registered postcode of your business"))),
     classes = "govuk-input--width-10",
     label = Label(
     isPageHeading = true,
     classes = "govuk-label--m",
-    content = Text("Please enter your business postcode")
+    content = Text("Postcode")
     )
     ))
     }

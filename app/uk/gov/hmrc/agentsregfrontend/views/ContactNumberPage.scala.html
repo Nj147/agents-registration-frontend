@@ -8,7 +8,6 @@
 @if(!isUpdate) {
 <a href="@uk.gov.hmrc.agentsregfrontend.controllers.routes.EmailController.displayEmailPage(false)" class="govuk-back-link">Back</a>
 }
-<h1 class="govuk-heading-xl">Enter Contact Number</h1>
 @if(form.errors.nonEmpty) {
 @defining(form.errors.map { error =>
 ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))
@@ -26,14 +25,14 @@ title = Text(messages("There is a problem"))
     id = "number",
     name = "number",
     value = Some(form.data("number")),
-    classes = "govuk-input--width-10",
-    hint = Some(Hint(content = Text("The phone number you prefer to be contacted on, for example - '01615555555'"))),
+    classes = "govuk-input--width-20",
+    hint = Some(Hint(content = Text("Your valid UK number, excluding the country code"))),
     errorMessage = Some(ErrorMessage(
     content = Text("Please enter a valid phone number"))),
     label = Label(
     isPageHeading = true,
-    classes = "govuk-label--m",
-    content = Text("Contact Number")
+    classes = "govuk-label--l",
+    content = Text("What is your contact number?")
     )
     ))
     } else {
@@ -41,12 +40,12 @@ title = Text(messages("There is a problem"))
     id = "number",
     name = "number",
     value = Some(form.data("number")),
-    classes = "govuk-input--width-10",
-    hint = Some(Hint(content = Text("The phone number you prefer to be contacted on, for example - '01615555555'"))),
+    classes = "govuk-input--width-20",
+    hint = Some(Hint(content = Text("Your valid UK number, excluding the country code"))),
     label = Label(
     isPageHeading = true,
-    classes = "govuk-label--m",
-    content = Text("Contact Number")
+    classes = "govuk-label--l",
+    content = Text("What is your contact number?")
     )
     ))
     }
